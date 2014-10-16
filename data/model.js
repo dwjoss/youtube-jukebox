@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var bcrypt = require('bcrypt'); // Used for hashing passwords
 
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
@@ -9,6 +10,13 @@ var userSchema = new Schema({
 	password      : String,
 	room          : {type: ObjectId, ref: 'Room'}
 }); 
+
+userSchema.methods.validPassword = function validPassword(password) {
+	if (bcrypt.compareSync(password, this.password)) {
+		return true;
+	}
+	return false;
+}
 
 var roomSchema = new Schema({
 	listeners : [{ type: ObjectId, ref: 'User' }],
