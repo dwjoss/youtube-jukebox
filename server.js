@@ -110,6 +110,15 @@ app.use(function(err, req, res, next) {
 var port = process.env.OPENSHIFT_NODEJS_PORT;
 var ip = process.env.OPENSHIFT_NODEJS_IP;
 
-app.listen(port || 8080, ip);
+var debug = require('debug')('ytj');
+
+app.set('port', port || 3000);
+
+var server = app.listen(app.get('port'), ip, function() {
+ debug('Express server listening on port ' + server.address().port);
+});
+
+var io = require('socket.io').listen(server);
+require('./routes/sockets')(io);
 
 module.exports = app;
