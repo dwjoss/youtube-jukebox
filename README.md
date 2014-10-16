@@ -1,4 +1,2 @@
-proj3
+Project 3: YouTube Jukebox
 =====
-
-Project 3: Mini team project
