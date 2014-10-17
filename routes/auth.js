@@ -35,19 +35,37 @@ router.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+router.get('/user', function(req, res){
+  res.json(req.user);
+});
+
 /* POST User Info -> Store in DB -> Login Session -> return User || 500 if Mongo Fails to Create User 
    INPUT PARAMS: name, email, password
 */
 router.post('/create', function(req, res) {
 	var password = bcrypt.hashSync(req.body.password, 10);
-	var newUser = new model.User({ 	"name": req.body.name, "email": req.body.email, "password": password });
+	var newUser = new model.User({ 	name: req.body.name, email: req.body.email, password: password });
 	newUser.save(function(err, user) {
 		if (err) {
 			res.status(500).json({ error: 'There was an error creating the user.' });
 		} else {
-			req.login(user, function(err) {
-			  if (err) { res.status(500).json({ error: 'There was an error creating the user session.' }); }
-			  return res.json(user);
+			var newRoom = new model.Room({});
+			newRoom.save(function(err, room) {
+				if (err) {
+					res.status(500).json({ error: 'There was an error creating the user.' });
+				} else {
+					model.User.update({ _id: user._id },{ room : room }, function (err) {
+						if (err) {
+							res.status(500).json({ error: 'There was an error creating the room.' });
+						}
+						else {
+							req.login(user, function(err) {
+							  if (err) { return res.status(500).json({ error: 'There was an error creating the user session.' }); }
+							  return res.json(user);
+							});
+						}
+					});
+				}
 			});
 		}	
 	});

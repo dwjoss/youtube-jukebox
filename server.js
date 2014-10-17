@@ -1,4 +1,4 @@
-var express = require('express');
+var express = require('express.io');
 var session = require('express-session')
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -29,10 +29,11 @@ db.on('error', console.error.bind(console, 'Mongoose Connection Error:'));
 var model = require('./data/model');
 
 var routes = require('./routes/index');
-var api = require('./routes/api');
 var auth = require('./routes/auth');
+var api = require('./routes/api');
 
 var app = express();
+app.http().io();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -73,8 +74,8 @@ passport.deserializeUser(function(id, done) {
 });
 
 app.use('/', routes);
-app.use('/api', api);
 app.use('/auth', auth);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -117,8 +118,5 @@ app.set('port', port || 3000);
 var server = app.listen(app.get('port'), ip, function() {
  debug('Express server listening on port ' + server.address().port);
 });
-
-var io = require('socket.io').listen(server);
-require('./routes/sockets')(io);
 
 module.exports = app;

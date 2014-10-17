@@ -19,8 +19,7 @@ userSchema.methods.validPassword = function validPassword(password) {
 }
 
 var roomSchema = new Schema({
-	listeners : [{ type: ObjectId, ref: 'User' }],
-    url  	  : String,
+	listeners : [],
     queue     : []
 }); 
 
