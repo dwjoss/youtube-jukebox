@@ -8,7 +8,7 @@ var bcrypt = require('bcrypt'); // Used for hashing passwords
 var model = require('../data/model');
 var router = express.Router();
 
-/* POST User Login Info -> Handle Authentication With Passport -> Redirect 
+/* POST User Login Info -> Handle Authentication With Passport -> User Object || 401 if login not successful || 500 if server error
    INPUT PARAMS: email, password
 */
 router.post('/login', function(req, res, next) {
@@ -35,11 +35,7 @@ router.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-router.get('/user', function(req, res){
-  res.json(req.user);
-});
-
-/* POST User Info -> Store in DB -> Login Session -> return User || 500 if Mongo Fails to Create User 
+/* POST User Info -> Store in DB -> Login Session -> return User Object || 500 if Mongo Fails to Create User 
    INPUT PARAMS: name, email, password
 */
 router.post('/create', function(req, res) {
