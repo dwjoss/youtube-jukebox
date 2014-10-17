@@ -18,7 +18,7 @@ router.post('/search', function(req, res) {
 	  startIndex: 1
 	};
 	search(req.body.query, opts, function(err, results) {
-	  if(err) return res.status(500).json{message:'Unable to fetch results from YouTube.'};
+	  if(err) return res.status(500).json({message:'Unable to fetch results from YouTube.'});
 	  res.json(results);
 	});
 });
@@ -51,7 +51,7 @@ router.post('/queue/add', function(req, res) {
 	
 });
 
-/* POST Room to Pop Song From -> Pop Song off Queue -> -> Broadcast Socket Event of New Song -> return Array of YouTube Video Objects on Queue for room || 401 if not logged in
+/* POST Room to Pop Song From -> Pop Song off Queue -> Broadcast Socket Event of New Song -> return Array of YouTube Video Objects on Queue for room || 401 if not logged in
    INPUT PARAMS: room
 */
 router.put('/queue/pop', function(req, res) {
