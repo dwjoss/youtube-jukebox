@@ -46,7 +46,19 @@ router.post('/join', function(req, res) {
    INPUT PARAMS: room, name
 */
 router.post('/leave', function(req, res) {
-
+    model.Room.findByIdAndUpdate(
+        req.body.roomID, 
+        {$pull: {listeners: req.body.name}},
+        function(err, room) {
+            if (err) {
+                return res.status(500).json({error: 'There was an error leaving the room.'});
+            }
+            if (!room) {
+                return res.status(404).json({error: 'The room requested was not found.'});
+            }
+            res.json(room.listeners);
+        }
+    );
 });
 
 /* GET Song Queue Request -> Fetch Queue for Room -> return Array of YouTube Video Objects on Queue for room
