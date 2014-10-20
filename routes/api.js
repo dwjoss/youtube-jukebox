@@ -41,13 +41,21 @@ router.post('/leave', function(req, res) {
    INPUT PARAMS: room
 */
 router.get('/queue/songs', function(req, res) {
-
+	model.Room.findById(req.body.room, function(err, room){
+		res.json(room.queue);
+	})
 });
 
 /* POST YouTube Video Object -> Add object to room queue -> Broadcast Socket Event of New Song -> return Array of YouTube Video Objects on Queue for room
    INPUT PARAMS: room, song
 */
 router.post('/queue/add', function(req, res) {
+	model.Room.findByIdAndUpdate(
+		req.body.room,
+		{$push: {queue: req.body.song},function(err,room){
+			
+		}}
+	);
 	
 });
 
