@@ -28,7 +28,7 @@ router.post('/search', function(req, res) {
 */
 router.post('/join', function(req, res) {
     model.Room.findByIdAndUpdate(
-        req.body.roomID, 
+        req.body.room, 
         {$push: {listeners: req.body.name}},
         function(err, room) {
             if (err) {
@@ -37,8 +37,8 @@ router.post('/join', function(req, res) {
             if (!room) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
-            req.io.join(req.body.roomID);
-            app.io.room(req.body.roomID).broadcast('announce', {message: req.body.name + 'just joined room ' + req.body.roomID}):
+            req.io.join(req.body.room);
+            app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just joined room ' + req.body.room});
             res.json(room.listeners);
         }
     );
@@ -59,7 +59,7 @@ router.post('/leave', function(req, res) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
             req.io.leave(req.body.roomID);
-            app.io.room(req.body.roomID).broadcast('announce', {message: req.body.name + 'just left room ' + req.body.roomID}):
+            app.io.room(req.body.roomID).broadcast('announce', {message: req.body.name + 'just left room ' + req.body.roomID});
             
             return res.status(200).json({message: req.body.name + 'just left room ' + req.body.roomID});
         }
@@ -102,7 +102,7 @@ router.put('/queue/pop', function(req, res) {
 	if (req.user) {
 		model.Room.findByIdAndUpdate(
 		req.body.room,
-		{$pull: {queue: req.body.song}},
+		{$pull: {queue: req.body.room.queue[0]}},
 		function(err,room){
 			if (err) {
                 return res.status(500).json({error: 'There was an error poping song off the queue.'});
