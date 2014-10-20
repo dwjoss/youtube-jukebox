@@ -64,9 +64,16 @@ router.get('/queue/songs', function(req, res) {
 router.post('/queue/add', function(req, res) {
 	model.Room.findByIdAndUpdate(
 		req.body.room,
-		{$push: {queue: req.body.song},function(err,room){
-			
-		}}
+		{$push: {queue: req.body.song}},
+		function(err,room){
+			if (err) {
+                return res.status(500).json({error: 'There was an error addding song to the queue.'});
+            }
+            if (!room) {
+                return res.status(404).json({error: 'The room requested was not found.'});
+            }
+            res.json(room.queue);
+		}
 	);
 	
 });
@@ -76,7 +83,19 @@ router.post('/queue/add', function(req, res) {
 */
 router.put('/queue/pop', function(req, res) {
 	if (req.user) {
-		// *** IMPLEMENT HERE
+		model.Room.findByIdAndUpdate(
+		req.body.room,
+		{$pull: {queue: req.body.song}},
+		function(err,room){
+			if (err) {
+                return res.status(500).json({error: 'There was an error poping song off the queue.'});
+            }
+            if (!room) {
+                return res.status(404).json({error: 'The room requested was not found.'});
+            }
+            res.json(room.queue);
+		}
+	);
 	} else {
 		res.status(401);
 	}
