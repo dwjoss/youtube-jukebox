@@ -37,6 +37,8 @@ router.post('/join', function(req, res) {
             if (!room) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
+            req.io.join(req.body.roomID);
+            app.io.room(req.body.roomID).broadcast('announce', {message: req.body.name + 'just joined room ' + req.body.roomID}):
             res.json(room.listeners);
         }
     );
@@ -56,7 +58,10 @@ router.post('/leave', function(req, res) {
             if (!room) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
-            res.json(room.listeners);
+            req.io.leave(req.body.roomID);
+            app.io.room(req.body.roomID).broadcast('announce', {message: req.body.name + 'just left room ' + req.body.roomID}):
+            
+            return res.status(200).json({message: req.body.name + 'just left room ' + req.body.roomID});
         }
     );
 });
