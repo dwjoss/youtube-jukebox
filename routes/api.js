@@ -37,6 +37,8 @@ router.post('/join', function(req, res) {
             if (!room) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
+            req.io.join(req.body.roomID);
+            app.io.room(req.body.roomID).broadcast('announce', {message: req.body.name + 'just joined room ' + req.body.roomID}):
             res.json(room.listeners);
         }
     );
@@ -46,7 +48,22 @@ router.post('/join', function(req, res) {
    INPUT PARAMS: room, name
 */
 router.post('/leave', function(req, res) {
-
+    model.Room.findByIdAndUpdate(
+        req.body.roomID, 
+        {$pull: {listeners: req.body.name}},
+        function(err, room) {
+            if (err) {
+                return res.status(500).json({error: 'There was an error leaving the room.'});
+            }
+            if (!room) {
+                return res.status(404).json({error: 'The room requested was not found.'});
+            }
+            req.io.leave(req.body.roomID);
+            app.io.room(req.body.roomID).broadcast('announce', {message: req.body.name + 'just left room ' + req.body.roomID}):
+            
+            return res.status(200).json({message: req.body.name + 'just left room ' + req.body.roomID});
+        }
+    );
 });
 
 /* GET Song Queue Request -> Fetch Queue for Room -> return Array of YouTube Video Objects on Queue for room
