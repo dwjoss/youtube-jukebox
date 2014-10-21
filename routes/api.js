@@ -39,12 +39,12 @@ router.post('/join', function(req, res) {
                 return res.status(500).json({error: 'There was an error joining the room.'});
             }
             if (!room) {
+                console.log("room not found");
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
             console.log("JOOOOOOOOINNNNNNN");
-            console.log(room);
-            req.io.join(req.body.room);
-            app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just joined room ' + req.body.room});
+            //req.io.join(req.body.room);
+            //app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just joined room ' + req.body.room});
             res.json(room.listeners);
         }
     );
@@ -62,6 +62,7 @@ router.post('/leave', function(req, res) {
                 return res.status(500).json({error: 'There was an error leaving the room.'});
             }
             if (!room) {
+                console.log("room not found");
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
             req.io.leave(req.body.room);

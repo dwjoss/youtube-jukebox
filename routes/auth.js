@@ -45,7 +45,7 @@ router.post('/create', function(req, res) {
 		if (err) {
 			res.status(500).json({ error: 'There was an error creating the user.' });
 		} else {
-			var newRoom = new model.Room({});
+			var newRoom = new model.Room({_id: user._id});
 			newRoom.save(function(err, room) {
 				if (err) {
 					res.status(500).json({ error: 'There was an error creating the user.' });

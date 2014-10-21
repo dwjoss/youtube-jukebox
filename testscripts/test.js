@@ -42,6 +42,7 @@ $.ajax({
     async: false,
     data: {
         'room': room,
+        'name': 'Dylan',
     },
     success: function(msg) {
         console.log('Tested api/join');
