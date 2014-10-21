@@ -12,7 +12,8 @@ $.ajax({
     },
     success: function(data){
         room = data._id;
-        console.log(room);
+        console.log('Tested auth/create');
+        console.log('Host created room ' + room);
     },
     error: function(req, textStatus, error) {
         console.log(textStatus);
@@ -47,6 +48,43 @@ $.ajax({
     success: function(msg) {
         console.log('Tested api/join');
         console.log('Logged in users: ' + msg);
+    },
+    error: function(req, textStatus, error) {
+        console.log(textStatus);
+        console.log(error);
+    }
+});
+
+$.ajax({
+    type: 'POST',
+    url: 'http://localhost:3000/api/join',
+    async: false,
+    data: {
+        'room': room,
+        'name': 'Jason',
+    },
+    success: function(msg) {
+        console.log('Tested api/join');
+        console.log('Logged in users: ' + msg);
+    },
+    error: function(req, textStatus, error) {
+        console.log(textStatus);
+        console.log(error);
+    }
+});
+
+
+$.ajax({
+    type: 'POST',
+    url: 'http://localhost:3000/api/leave',
+    async: false,
+    data: {
+        'room': room,
+        'name': 'Dylan',
+    },
+    success: function(msg) {
+        console.log('Tested api/leave');
+        console.log(msg);
     },
     error: function(req, textStatus, error) {
         console.log(textStatus);
