@@ -16,11 +16,11 @@ $.ajax({
     }
 });
 
+
 // Testing API Methods
 
 $.ajax({
     type: 'POST',
-    dataType: 'jsonp',
     url: 'http://localhost:3000/api/search',
     data: { 
         'query': 'MIT', 
@@ -33,7 +33,6 @@ $.ajax({
 
 $.ajax({
     type: 'POST',
-    dataType: 'jsonp',
     url: 'http://localhost:3000/api/join',
     data: {
         'roomNumber': 123
