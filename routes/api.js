@@ -71,8 +71,8 @@ router.post('/leave', function(req, res) {
 /* GET Song Queue Request -> Fetch Queue for Room -> return Array of YouTube Video Objects on Queue for room
    INPUT PARAMS: room
 */
-router.post('/queue/songs', function(req, res) {
-	model.Room.findById(req.body.room, function(err, room){
+router.get('/queue/songs', function(req, res) {
+	model.Room.findById(req.param('room'), function(err, room){
 		res.json(room.queue);
 	})
 });
@@ -97,11 +97,12 @@ router.post('/queue/add', function(req, res) {
 	
 });
 
-/* POST Room to Pop Song From -> Pop Song off Queue -> Broadcast Socket Event of New Song -> return Array of YouTube Video Objects on Queue for room || 401 if not logged in
+/* PUT Room to Pop Song From -> Pop Song off Queue -> Broadcast Socket Event of New Song -> return Array of YouTube Video Objects on Queue for room || 401 if not logged in
    INPUT PARAMS: room
 */
 
-router.post('/queue/pop', function(req, res) {
+router.put('/queue/pop', function(req, res) {
+	if (req.user) {
         model.Room.findById(req.body.room,function(err,room){
             model.Room.findByIdAndUpdate(
             req.body.room,
@@ -118,7 +119,9 @@ router.post('/queue/pop', function(req, res) {
         );
 
         }); 
-
+    } else {
+	   res.status(401);
+	}
 });
 
 module.exports = router;
