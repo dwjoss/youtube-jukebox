@@ -76,7 +76,7 @@ router.post('/leave', function(req, res) {
 /* GET Song Queue Request -> Fetch Queue for Room -> return Array of YouTube Video Objects on Queue for room
    INPUT PARAMS: room
 */
-router.get('/queue/songs', function(req, res) {
+router.post('/queue/songs', function(req, res) {
 	model.Room.findById(req.body.room, function(err, room){
 		res.json(room.queue);
 	})
@@ -105,24 +105,23 @@ router.post('/queue/add', function(req, res) {
 /* POST Room to Pop Song From -> Pop Song off Queue -> Broadcast Socket Event of New Song -> return Array of YouTube Video Objects on Queue for room || 401 if not logged in
    INPUT PARAMS: room
 */
-router.put('/queue/pop', function(req, res) {
-	if (req.user) {
-		model.Room.findByIdAndUpdate(
-		req.body.room,
-		{$pull: {queue: req.body.room.queue[0]}},
-		function(err,room){
-			if (err) {
+router.post('/queue/pop', function(req, res) {
+        model.Room.findById(req.body.room,function(err,room){
+            model.Room.findByIdAndUpdate(
+            req.body.room,
+            {$pull: {queue: room.queue[0]}},
+            function(err,room){
+            if (err) {
                 return res.status(500).json({error: 'There was an error poping song off the queue.'});
             }
             if (!room) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
             res.json(room.queue);
-		}
-	);
-	} else {
-		res.status(401);
-	}
+            }
+        );
+
+        }); 
 
 });
 

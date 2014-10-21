@@ -53,3 +53,73 @@ $.ajax({
         console.log(error);
     }
 });
+
+$.ajax({
+    type: 'POST',
+    url: 'http://localhost:3000/api/queue/add',
+    async: false,
+    data: {
+        'room': room,
+        'song': 'Turn down for what',
+    },
+    success: function(msg) {
+        console.log('Tested api/queue/add');
+        console.log('New song queues ' + msg);
+    },
+    error: function(req, textStatus, error) {
+        console.log(textStatus);
+        console.log(error);
+    }
+});
+
+$.ajax({
+    type: 'POST',
+    url: 'http://localhost:3000/api/queue/add',
+    async: false,
+    data: {
+        'room': room,
+        'song': 'Get low',
+    },
+    success: function(msg) {
+        console.log('Tested api/queue/add');
+        console.log('New song queues ' + msg);
+    },
+    error: function(req, textStatus, error) {
+        console.log(textStatus);
+        console.log(error);
+    }
+});
+
+$.ajax({
+    type: 'POST',
+    url: 'http://localhost:3000/api/queue/songs',
+    async: false,
+    data: {
+        'room': room
+    },
+    success: function(msg) {
+        console.log('Tested api/queue/songs');
+        console.log('Song queue ' + msg);
+    },
+    error: function(req, textStatus, error) {
+        console.log(textStatus);
+        console.log(error);
+    }
+});
+
+$.ajax({
+    type: 'POST',
+    url: 'http://localhost:3000/api/queue/pop',
+    async: false,
+    data: {
+        'room': room,
+    },
+    success: function(msg) {
+        console.log('Tested api/queue/pop');
+        console.log('New song queues ' + msg);
+    },
+    error: function(req, textStatus, error) {
+        console.log(textStatus);
+        console.log(error);
+    }
+});
