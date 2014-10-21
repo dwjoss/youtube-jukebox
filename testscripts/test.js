@@ -1,17 +1,18 @@
 // Host login
-var roomNumber;
+var room;
 
 $.ajax({
     type: 'POST',
     url: 'http://localhost:3000/auth/create',
+    async: false,
     data: { 
         email: "host@gmail.com", 
         name: "host", 
         password: "password" 
     },
     success: function(data){
-        roomNumber = jQuery.parseJSON(data);
-        console.log(roomNumber);
+        room = data._id;
+        console.log(room);
     },
     error: function(req, textStatus, error) {
         console.log(textStatus);
@@ -25,6 +26,7 @@ $.ajax({
 $.ajax({
     type: 'POST',
     url: 'http://localhost:3000/api/search',
+    async: false,
     data: { 
         'query': 'MIT', 
     },
@@ -37,8 +39,9 @@ $.ajax({
 $.ajax({
     type: 'POST',
     url: 'http://localhost:3000/api/join',
+    async: false,
     data: {
-        'roomNumber': roomNumber
+        'room': room,
     },
     success: function(msg) {
         console.log('Tested api/join');
