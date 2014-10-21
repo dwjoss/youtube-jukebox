@@ -3,8 +3,8 @@ var roomNumber;
 
 $.post( "localhost:3000/create", 
         { email: "host@gmail.com", 
-          name: "host" 
-          passowrd: "password" })
+          name: "host", 
+          password: "password" })
         .done(function(data){
             roomNumber = $.parseJSON(data);
         });
@@ -13,7 +13,6 @@ $.post( "localhost:3000/create",
 
 $.ajax({
     type: 'POST',
-    dataType: 'jsonp',
     url: 'http://localhost:3000/api/search',
     data: { 
         'query': 'MIT', 
@@ -26,7 +25,6 @@ $.ajax({
 
 $.ajax({
     type: 'POST',
-    dataType: 'jsonp',
     url: 'http://localhost:3000/api/join',
     data: {
         'roomNumber': 123
