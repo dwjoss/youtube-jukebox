@@ -12,11 +12,13 @@ var router = express.Router();
    INPUT PARAMS: query
 */
 router.post('/search', function(req, res) {
+    console.log("hi");
 	var search = require('youtube-search');
 	var opts = {
 	  maxResults: 10,
 	  startIndex: 1
 	};
+    console.log(req.body.query);
 	search(req.body.query, opts, function(err, results) {
 	  if(err) return res.status(500).json({message:'Unable to fetch results from YouTube.'});
 	  res.json(results);
@@ -27,6 +29,8 @@ router.post('/search', function(req, res) {
    INPUT PARAMS: room, name
 */
 router.post('/join', function(req, res) {
+    console.log("hello");
+    console.log(req.body.room);
     model.Room.findByIdAndUpdate(
         req.body.room, 
         {$push: {listeners: req.body.name}},
@@ -37,6 +41,8 @@ router.post('/join', function(req, res) {
             if (!room) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
+            console.log("JOOOOOOOOINNNNNNN");
+            console.log(room);
             req.io.join(req.body.room);
             app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just joined room ' + req.body.room});
             res.json(room.listeners);
@@ -49,7 +55,7 @@ router.post('/join', function(req, res) {
 */
 router.post('/leave', function(req, res) {
     model.Room.findByIdAndUpdate(
-        req.body.roomID, 
+        req.body.room, 
         {$pull: {listeners: req.body.name}},
         function(err, room) {
             if (err) {
@@ -58,10 +64,10 @@ router.post('/leave', function(req, res) {
             if (!room) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
-            req.io.leave(req.body.roomID);
-            app.io.room(req.body.roomID).broadcast('announce', {message: req.body.name + 'just left room ' + req.body.roomID});
+            req.io.leave(req.body.room);
+            app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just left room ' + req.body.room});
             
-            return res.status(200).json({message: req.body.name + 'just left room ' + req.body.roomID});
+            return res.status(200).json({message: req.body.name + 'just left room ' + req.body.room});
         }
     );
 });
