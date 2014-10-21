@@ -3,15 +3,14 @@ var roomNumber;
 
 $.ajax({
     type: 'POST',
-    dataType: 'jsonp',
     url: 'http://localhost:3000/auth/create',
     data: { 
         email: "host@gmail.com", 
         name: "host", 
-        passowrd: "password" 
+        password: "password" 
     },
-    success: function(msg){
-        roomNumber = $.parseJSON(data);
+    success: function(data){
+        roomNumber = jQuery.parseJSON(data);
         console.log(roomNumber);
     }
 });
