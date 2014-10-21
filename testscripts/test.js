@@ -38,7 +38,7 @@ $.ajax({
     type: 'POST',
     url: 'http://localhost:3000/api/join',
     data: {
-        'roomNumber': 123
+        'roomNumber': roomNumber
     },
     success: function(msg) {
         console.log('Tested api/join');
