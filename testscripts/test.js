@@ -13,6 +13,10 @@ $.ajax({
     success: function(msg){
         roomNumber = $.parseJSON(data);
         console.log(roomNumber);
+    },
+    error: function(req, textStatus, error) {
+        console.log(textStatus);
+        console.log(error);
     }
 });
 
@@ -40,5 +44,9 @@ $.ajax({
     success: function(msg) {
         console.log('Tested api/join');
         console.log('Logged in users: ' + msg);
+    },
+    error: function(req, textStatus, error) {
+        console.log(textStatus);
+        console.log(error);
     }
 });
