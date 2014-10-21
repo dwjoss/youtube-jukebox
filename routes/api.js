@@ -12,13 +12,11 @@ var router = express.Router();
    INPUT PARAMS: query
 */
 router.post('/search', function(req, res) {
-    console.log("hi");
 	var search = require('youtube-search');
 	var opts = {
 	  maxResults: 10,
 	  startIndex: 1
 	};
-    console.log(req.body.query);
 	search(req.body.query, opts, function(err, results) {
 	  if(err) return res.status(500).json({message:'Unable to fetch results from YouTube.'});
 	  res.json(results);
@@ -29,8 +27,6 @@ router.post('/search', function(req, res) {
    INPUT PARAMS: room, name
 */
 router.post('/join', function(req, res) {
-    console.log("hello");
-    console.log(req.body.room);
     model.Room.findByIdAndUpdate(
         req.body.room, 
         {$push: {listeners: req.body.name}},
@@ -42,9 +38,9 @@ router.post('/join', function(req, res) {
                 console.log("room not found");
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
-            console.log("JOOOOOOOOINNNNNNN");
             //req.io.join(req.body.room);
             //app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just joined room ' + req.body.room});
+            
             res.json(room.listeners);
         }
     );
@@ -62,13 +58,12 @@ router.post('/leave', function(req, res) {
                 return res.status(500).json({error: 'There was an error leaving the room.'});
             }
             if (!room) {
-                console.log("room not found");
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
-            req.io.leave(req.body.room);
-            app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just left room ' + req.body.room});
+            //req.io.leave(req.body.room);
+            //app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just left room ' + req.body.room});
             
-            return res.status(200).json({message: req.body.name + 'just left room ' + req.body.room});
+            return res.status(200).json({message: req.body.name + ' just left room ' + req.body.room});
         }
     );
 });
@@ -105,6 +100,7 @@ router.post('/queue/add', function(req, res) {
 /* POST Room to Pop Song From -> Pop Song off Queue -> Broadcast Socket Event of New Song -> return Array of YouTube Video Objects on Queue for room || 401 if not logged in
    INPUT PARAMS: room
 */
+
 router.post('/queue/pop', function(req, res) {
         model.Room.findById(req.body.room,function(err,room){
             model.Room.findByIdAndUpdate(

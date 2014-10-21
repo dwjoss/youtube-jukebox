@@ -1,5 +1,7 @@
 /*
 General logic for handling user authentication
+
+AJAX requests are asynchronous to ensure that they run in the order shown
 */
 
 var express = require('express');
@@ -29,7 +31,9 @@ router.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 
-/* GET Logout Request -> Logout Session -> Redirect to Root */
+/* GET Logout Request -> Logout Session -> Redirect to Root 
+   INPUT PARAMS: none
+*/
 router.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
