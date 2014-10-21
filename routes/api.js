@@ -107,7 +107,7 @@ router.put('/queue/pop', function(req, res) {
 		{$pull: {queue: req.body.room.queue[0]}},
 		function(err,room){
 			if (err) {
-                return res.status(500).json({error: 'There was an error poping song off the queue.'});
+                return res.status(500).json({error: 'There was an error popping song off the queue.'});
             }
             if (!room) {
                 return res.status(404).json({error: 'The room requested was not found.'});
