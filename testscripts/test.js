@@ -1,13 +1,20 @@
 // Host login
 var roomNumber;
 
-$.post( "localhost:3000/create", 
-        { email: "host@gmail.com", 
-          name: "host" 
-          passowrd: "password" })
-        .done(function(data){
-            roomNumber = $.parseJSON(data);
-        });
+$.ajax({
+    type: 'POST',
+    dataType: 'jsonp',
+    url: 'http://localhost:3000/auth/create',
+    data: { 
+        email: "host@gmail.com", 
+        name: "host", 
+        passowrd: "password" 
+    },
+    success: function(msg){
+        roomNumber = $.parseJSON(data);
+        console.log(roomNumber);
+    }
+});
 
 // Testing API Methods
 
