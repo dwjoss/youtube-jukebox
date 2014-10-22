@@ -48,10 +48,9 @@ $(document).ready(function() {
 	// listener Dylan joins the room
 	$.ajax({
 	    type: 'POST',
-	    url: '/api/join',
+	    url: '/api/rooms/' + room + '/users',
 	    async: false,
 	    data: {
-	        'room': room,
 	        'name': 'Dylan'
 	    },
 	    success: function(msg) {
@@ -67,10 +66,9 @@ $(document).ready(function() {
 	// listener Jason joins the room
 	$.ajax({
 	    type: 'POST',
-	    url: '/api/join',
+	    url: '/api/rooms/' + room + '/users',
 	    async: false,
 	    data: {
-	        'room': room,
 	        'name': 'Jason'
 	    },
 	    success: function(msg) {
@@ -86,10 +84,9 @@ $(document).ready(function() {
 	// someone adds a song "Turn down for what" in the queue
 	$.ajax({
 	    type: 'POST',
-	    url: '/api/queue/add',
+	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
 	    data: {
-	        'room': room,
 	        'song': 'Turn down for what',
 	    },
 	    success: function(msg) {
@@ -105,10 +102,9 @@ $(document).ready(function() {
 	// someone adds a song "Get low" in the queue
 	$.ajax({
 	    type: 'POST',
-	    url: '/api/queue/add',
+	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
 	    data: {
-	        'room': room,
 	        'song': 'Get low',
 	    },
 	    success: function(msg) {
@@ -124,11 +120,8 @@ $(document).ready(function() {
 	// someone reqeusts to see the list of songs in the queue
 	$.ajax({
 	    type: 'GET',
-	    url: '/api/queue/songs',
+	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
-	    data: {
-	        'room': room
-	    },
 	    success: function(msg) {
 	        console.log('Tested api/queue/songs');
 	        console.log('Song queue ' + msg);
@@ -141,12 +134,9 @@ $(document).ready(function() {
 
 	// the first song was popped from the list
 	$.ajax({
-	    type: 'PUT',
-	    url: '/api/queue/pop',
+	    type: 'DELETE',
+	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
-	    data: {
-	        'room': room,
-	    },
 	    success: function(msg) {
 	        console.log('Tested api/queue/pop');
 	        console.log('New song queues ' + msg);
@@ -159,13 +149,9 @@ $(document).ready(function() {
 
 	// listener Dylan leaves the room
 	$.ajax({
-	    type: 'POST',
-	    url: '/api/leave',
+	    type: 'DELETE',
+	    url: '/api/rooms/' + room +'/users/Dylan',
 	    async: false,
-	    data: {
-	        'room': room,
-	        'name': 'Dylan'
-	    },
 	    success: function(msg) {
 	        console.log('Tested api/leave');
 	        console.log(msg);
