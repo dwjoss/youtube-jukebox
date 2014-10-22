@@ -24,8 +24,14 @@ router.param('room', function(req, res, next, roomId) {
   });
 });
 
-/* POST Search Query -> Fetch Videos -> return Array of YouTube Video Objects || 500 if search fails
-   INPUT PARAMS: query
+/*
+List YouTube results from search query
+POST /search
+Request parameters:
+    query: (String) query string to be sent to youtube
+Response:
+    success(200): returns a list of YouTube json objects 
+    error(500);  returns error message: “Unable to fetch results from YouTube.”
 */
 router.post('/search', function(req, res) {
 	var search = require('youtube-search');
@@ -39,8 +45,16 @@ router.post('/search', function(req, res) {
 	});
 });
 
-/* POST Join Request -> Add User to Room -> Broadcast Socket Event of New Join -> return Array of Users in Room || 500 if server error
-   INPUT PARAMS: name
+
+/*
+Add a user to a room
+POST /rooms/:roomId/users
+Request parameters:
+    name: name of the user to add to the room
+Response:
+    success(200): returns a list of listeners in the room
+    error(500) returns error message: “There was an error joining the room.”
+    error(404): returns error message: 'The room requested was not found.'
 */
 router.post('/rooms/:room/users', function(req, res) {
     model.Room.findByIdAndUpdate(
@@ -63,7 +77,14 @@ router.post('/rooms/:room/users', function(req, res) {
     );
 });
 
-/* DELETE Request -> Remove User From Room -> Broadcast Socket Event of Left User -> return 200
+/* 
+Delete a user from a room
+DELETE /rooms/:roomId/users/:name
+No request parameters
+Response:
+    success(200): returns a message: [User] just left room [roomId]
+    error(500) returns error message: “There was an error leaving the room.”
+    error(404): returns error message: 'The room requested was not found.'
 */
 router.delete('/rooms/:room/users/:name', function(req, res) {
     var name = req.params.name;
@@ -85,14 +106,27 @@ router.delete('/rooms/:room/users/:name', function(req, res) {
     );
 });
 
-/* GET Song Queue Request -> Fetch Queue for Room -> return Array of YouTube Video Objects on Queue for room
+/* 
+Get list of songs from the queue of a room
+GET  /rooms/:room/queue/songs
+No request parameters
+Response:
+    success(200): returns the list of songs in the queue
+    error(404): returns error message: 'The room requested was not found.'
 */
 router.get('/rooms/:room/queue/songs', function(req, res) {
 	res.json(req.room.queue);
 });
 
-/* POST YouTube Video Object -> Add object to room queue -> Broadcast Socket Event of New Song -> return Array of YouTube Video Objects on Queue for room
-   INPUT PARAMS: song
+/* 
+Add a song to the queue of a room
+POST '/rooms/:room/queue/songs'
+Request parameters:
+    song: name of the song
+Response:
+    success(200): returns the list of songs in the queue
+    error(404): returns error message: 'The room requested was not found.'
+    error(500): returns error message: 'There was an error adding song to the queue.'
 */
 router.post('/rooms/:room/queue/songs', function(req, res) {
 	model.Room.findByIdAndUpdate(
@@ -111,8 +145,14 @@ router.post('/rooms/:room/queue/songs', function(req, res) {
 	
 });
 
-/* PUT Room to Pop Song From -> Pop Song off Queue -> Broadcast Socket Event of New Song -> return Array of YouTube Video Objects on Queue for room || 401 if not logged in
-   INPUT PARAMS: room
+/* 
+Pop off the first song from the queue of a room
+DELETE '/rooms/:room/queue/songs'
+No request parameters
+Response:
+    success(200): returns the list of remaining songs in the room
+    error(404): returns error message: 'The room requested was not found.'
+    error(500): returns error message: 'There was an error popping song off the queue.'
 */
 
 router.delete('/rooms/:room/queue/songs', function(req, res) {
