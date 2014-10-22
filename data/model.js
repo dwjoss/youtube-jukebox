@@ -12,10 +12,7 @@ var userSchema = new Schema({
 }); 
 
 userSchema.methods.validPassword = function validPassword(password) {
-	if (bcrypt.compareSync(password, this.password)) {
-		return true;
-	}
-	return false;
+    return bcrypt.compareSync(password, this.password);
 }
 
 var roomSchema = new Schema({

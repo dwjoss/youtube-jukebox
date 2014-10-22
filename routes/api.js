@@ -8,8 +8,30 @@ var passport = require('passport');
 var model = require('../data/model');
 var router = express.Router();
 
-/* POST Search Query -> Fetch Videos -> return Array of YouTube Video Objects || 500 if search fails
-   INPUT PARAMS: query
+/*
+   Parse the room id out of the url
+*/
+router.param('room', function(req, res, next, roomId) {
+  model.Room.findOne({
+    _id: roomId
+  }, function(err, room) {
+    if (room) {
+      req.room = room;
+      next();
+    } else {
+      return res.status(404).json({error: 'The room requested was not found.'});
+    }
+  });
+});
+
+/*
+List YouTube results from search query
+POST /search
+Request parameters:
+    query: (String) query string to be sent to youtube
+Response:
+    success(200): returns a list of YouTube json objects 
+    error(500);  returns error message: “Unable to fetch results from YouTube.”
 */
 router.post('/search', function(req, res) {
 	var search = require('youtube-search');
@@ -23,12 +45,20 @@ router.post('/search', function(req, res) {
 	});
 });
 
-/* POST Join Request -> Add User to Room -> Broadcast Socket Event of New Join -> return Array of Users in Room || 500 if server error
-   INPUT PARAMS: room, name
+
+/*
+Add a user to a room
+POST /rooms/:roomId/users
+Request parameters:
+    name: name of the user to add to the room
+Response:
+    success(200): returns a list of listeners in the room
+    error(500) returns error message: “There was an error joining the room.”
+    error(404): returns error message: 'The room requested was not found.'
 */
-router.post('/join', function(req, res) {
+router.post('/rooms/:room/users', function(req, res) {
     model.Room.findByIdAndUpdate(
-        req.body.room, 
+        req.room._id,
         {$push: {listeners: req.body.name}},
         function(err, room) {
             if (err) {
@@ -40,19 +70,27 @@ router.post('/join', function(req, res) {
             }
             //req.io.join(req.body.room);
             //app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just joined room ' + req.body.room});
-            
+            console.log(room);
+            console.log(room.listeners);
             res.json(room.listeners);
         }
     );
 });
 
-/* POST Leave Request -> Remove User From Room -> Broadcast Socket Event of Left User -> return 200
-   INPUT PARAMS: room, name
+/* 
+Delete a user from a room
+DELETE /rooms/:roomId/users/:name
+No request parameters
+Response:
+    success(200): returns a message: [User] just left room [roomId]
+    error(500) returns error message: “There was an error leaving the room.”
+    error(404): returns error message: 'The room requested was not found.'
 */
-router.post('/leave', function(req, res) {
+router.delete('/rooms/:room/users/:name', function(req, res) {
+    var name = req.params.name;
     model.Room.findByIdAndUpdate(
-        req.body.room, 
-        {$pull: {listeners: req.body.name}},
+        req.room._id,  
+        {$pull: {listeners: name}},
         function(err, room) {
             if (err) {
                 return res.status(500).json({error: 'There was an error leaving the room.'});
@@ -63,26 +101,36 @@ router.post('/leave', function(req, res) {
             //req.io.leave(req.body.room);
             //app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just left room ' + req.body.room});
             
-            return res.status(200).json({message: req.body.name + ' just left room ' + req.body.room});
+            return res.status(200).json({message: name + ' just left room ' + req.room._id});
         }
     );
 });
 
-/* GET Song Queue Request -> Fetch Queue for Room -> return Array of YouTube Video Objects on Queue for room
-   INPUT PARAMS: room
+/* 
+Get list of songs from the queue of a room
+GET  /rooms/:room/queue/songs
+No request parameters
+Response:
+    success(200): returns the list of songs in the queue
+    error(404): returns error message: 'The room requested was not found.'
 */
-router.get('/queue/songs', function(req, res) {
-	model.Room.findById(req.param('room'), function(err, room){
-		res.json(room.queue);
-	})
+router.get('/rooms/:room/queue/songs', function(req, res) {
+	res.json(req.room.queue);
 });
 
-/* POST YouTube Video Object -> Add object to room queue -> Broadcast Socket Event of New Song -> return Array of YouTube Video Objects on Queue for room
-   INPUT PARAMS: room, song
+/* 
+Add a song to the queue of a room
+POST '/rooms/:room/queue/songs'
+Request parameters:
+    song: name of the song
+Response:
+    success(200): returns the list of songs in the queue
+    error(404): returns error message: 'The room requested was not found.'
+    error(500): returns error message: 'There was an error adding song to the queue.'
 */
-router.post('/queue/add', function(req, res) {
+router.post('/rooms/:room/queue/songs', function(req, res) {
 	model.Room.findByIdAndUpdate(
-		req.body.room,
+		req.room._id,
 		{$push: {queue: req.body.song}},
 		function(err,room){
 			if (err) {
@@ -97,16 +145,21 @@ router.post('/queue/add', function(req, res) {
 	
 });
 
-/* PUT Room to Pop Song From -> Pop Song off Queue -> Broadcast Socket Event of New Song -> return Array of YouTube Video Objects on Queue for room || 401 if not logged in
-   INPUT PARAMS: room
+/* 
+Pop off the first song from the queue of a room
+DELETE '/rooms/:room/queue/songs'
+No request parameters
+Response:
+    success(200): returns the list of remaining songs in the room
+    error(404): returns error message: 'The room requested was not found.'
+    error(500): returns error message: 'There was an error popping song off the queue.'
 */
 
-router.put('/queue/pop', function(req, res) {
+router.delete('/rooms/:room/queue/songs', function(req, res) {
 	if (req.user) {
-        model.Room.findById(req.body.room,function(err,room){
-            model.Room.findByIdAndUpdate(
-            req.body.room,
-            {$pull: {queue: room.queue[0]}},
+        model.Room.findByIdAndUpdate(
+            req.room._id,
+            {$pull: {queue: req.room.queue[0]}},
             function(err,room){
             if (err) {
                 return res.status(500).json({error: 'There was an error poping song off the queue.'});
@@ -116,9 +169,7 @@ router.put('/queue/pop', function(req, res) {
             }
             res.json(room.queue);
             }
-        );
-
-        }); 
+        ); 
     } else {
 	   res.status(401);
 	}
