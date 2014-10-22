@@ -19,7 +19,7 @@ $(document).ready(function() {
 	    },
 	    success: function(data){
 	        room = data._id;
-	        console.log('Tested auth/create');
+	        console.log('Tested POST auth/create');
 	        console.log('Host created room ' + room);
 	    },
 	    error: function(req, textStatus, error) {
@@ -40,7 +40,7 @@ $(document).ready(function() {
 	        'query': 'MIT', 
 	    },
 	    success: function(msg){
-	        console.log('Tested api/search');
+	        console.log('Tested POST api/search');
 	        console.log('YouTube search results: ' + msg);
 	    }
 	});
@@ -54,7 +54,7 @@ $(document).ready(function() {
 	        'name': 'Dylan'
 	    },
 	    success: function(msg) {
-	        console.log('Tested api/join');
+	        console.log('Tested POST api/rooms/:room/users');
 	        console.log('Logged in users: ' + msg);
 	    },
 	    error: function(req, textStatus, error) {
@@ -72,7 +72,7 @@ $(document).ready(function() {
 	        'name': 'Jason'
 	    },
 	    success: function(msg) {
-	        console.log('Tested api/join');
+	        console.log('Tested POST api/rooms/:room/users');
 	        console.log('Logged in users: ' + msg);
 	    },
 	    error: function(req, textStatus, error) {
@@ -81,17 +81,17 @@ $(document).ready(function() {
 	    }
 	});
 
-	// someone adds a song "Turn down for what" in the queue
+	// someone adds a song "Turn Down For What" in the queue
 	$.ajax({
 	    type: 'POST',
 	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
 	    data: {
-	        'song': 'Turn down for what',
+	        'song': 'Turn Down For What',
 	    },
 	    success: function(msg) {
-	        console.log('Tested api/queue/add');
-	        console.log('New song queues ' + msg);
+	        console.log('Tested POST api/queue/add');
+	        console.log('New song queue ' + msg);
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
@@ -99,17 +99,17 @@ $(document).ready(function() {
 	    }
 	});
 
-	// someone adds a song "Get low" in the queue
+	// someone adds a song "Get Low" in the queue
 	$.ajax({
 	    type: 'POST',
 	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
 	    data: {
-	        'song': 'Get low',
+	        'song': 'Get Low',
 	    },
 	    success: function(msg) {
-	        console.log('Tested api/queue/add');
-	        console.log('New song queues ' + msg);
+	        console.log('Tested POST api/queue/add');
+	        console.log('New song queue ' + msg);
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
@@ -117,13 +117,13 @@ $(document).ready(function() {
 	    }
 	});
 
-	// someone reqeusts to see the list of songs in the queue
+	// someone requests to see the list of songs in the queue
 	$.ajax({
 	    type: 'GET',
 	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
 	    success: function(msg) {
-	        console.log('Tested api/queue/songs');
+	        console.log('Tested GET api/rooms/:room/queue/songs');
 	        console.log('Song queue ' + msg);
 	    },
 	    error: function(req, textStatus, error) {
@@ -138,7 +138,7 @@ $(document).ready(function() {
 	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
 	    success: function(msg) {
-	        console.log('Tested api/queue/pop');
+	        console.log('Tested DELETE api/rooms/:room/queue/songs');
 	        console.log('New song queues ' + msg);
 	    },
 	    error: function(req, textStatus, error) {
@@ -153,7 +153,7 @@ $(document).ready(function() {
 	    url: '/api/rooms/' + room +'/users/Dylan',
 	    async: false,
 	    success: function(msg) {
-	        console.log('Tested api/leave');
+	        console.log('Tested DELETE api/rooms/:room/users/:name');
 	        console.log(msg);
 	    },
 	    error: function(req, textStatus, error) {
@@ -168,7 +168,7 @@ $(document).ready(function() {
 	    url: '/auth/logout',
 	    async: false,
 	    success: function(msg) {
-	        console.log('Tested auth/logout');
+	        console.log('Tested POST auth/logout');
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
@@ -186,7 +186,7 @@ $(document).ready(function() {
 	        'password': 'password'
 	    },
 	    success: function(msg) {
-	        console.log('Tested auth/login');
+	        console.log('Tested POST auth/login');
 	        console.log(msg);
 	    },
 	    error: function(req, textStatus, error) {
