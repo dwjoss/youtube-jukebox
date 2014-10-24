@@ -11,7 +11,11 @@ router.get('/', function(req, res) {
 });
 
 router.get(new RegExp('room\/(.+)'), function(req, res) {
-    res.render('index');
+	if (req.user && (req.user.room.toString() === req.params[0])) {
+		res.render('host');
+	} else {
+		res.render('participant');
+	}
 });
 
 router.get('/login', function(req, res) {
