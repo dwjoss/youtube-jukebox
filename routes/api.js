@@ -68,10 +68,7 @@ router.post('/rooms/:room/users', function(req, res) {
                 console.log("room not found");
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
-            //req.io.join(req.body.room);
-            //app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just joined room ' + req.body.room});
-            console.log(room);
-            console.log(room.listeners);
+            req.io.broadcast('users', {room: room._id, listeners: room.listeners});
             res.json(room.listeners);
         }
     );
@@ -98,9 +95,7 @@ router.delete('/rooms/:room/users/:name', function(req, res) {
             if (!room) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
-            //req.io.leave(req.body.room);
-            //app.io.room(req.body.room).broadcast('announce', {message: req.body.name + 'just left room ' + req.body.room});
-            
+            req.io.broadcast('users', {room: room._id, listeners: room.listeners});
             return res.status(200).json({message: name + ' just left room ' + req.room._id});
         }
     );
@@ -139,6 +134,7 @@ router.post('/rooms/:room/queue/songs', function(req, res) {
             if (!room) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
+			req.io.broadcast('addsong', {room: room._id, song: req.body.song});
             res.json(room.queue);
 		}
 	);
@@ -161,13 +157,14 @@ router.delete('/rooms/:room/queue/songs', function(req, res) {
             req.room._id,
             {$pull: {queue: req.room.queue[0]}},
             function(err,room){
-            if (err) {
-                return res.status(500).json({error: 'There was an error poping song off the queue.'});
-            }
-            if (!room) {
-                return res.status(404).json({error: 'The room requested was not found.'});
-            }
-            res.json(room.queue);
+	            if (err) {
+	                return res.status(500).json({error: 'There was an error poping song off the queue.'});
+	            }
+	            if (!room) {
+	                return res.status(404).json({error: 'The room requested was not found.'});
+	            }
+				req.io.broadcast('popsong', {room: room._id});
+	            res.json(room.queue);
             }
         ); 
     } else {
