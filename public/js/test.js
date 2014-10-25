@@ -42,7 +42,12 @@ $(document).ready(function() {
 	    success: function(msg){
 	        console.log('Tested POST api/search');
 	        console.log('YouTube search results: ' + msg);
-	    }
+	        
+            for (var i = 0; i < msg.length; i++) {
+                console.log(msg[i]);
+            }
+        
+        }
 	});
 
 	// listener Dylan joins the room
