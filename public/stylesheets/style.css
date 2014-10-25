@@ -51,6 +51,7 @@ h4, h5, p {
 
 #search-results {
 	height: 300px;
+	overflow: scroll;
 }
 
 #queue-container {
@@ -58,9 +59,10 @@ h4, h5, p {
 }
 
 #queue {
-	margin-top: -15px;
-	height: 150px; 
+	margin-top: 5px;
 	overflow: scroll;
+	height: 150px; 
+	padding-top: 30px;
 }
 
 #footer {
