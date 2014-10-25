@@ -23,6 +23,10 @@ router.get('/login', function(req, res) {
    res.render('login');
 });
 
+router.get('/debug',function(req,res){
+	res.render('debug');
+})
+
 router.get('/test', function(req, res) {
    res.render('test');
 });
