@@ -15,37 +15,57 @@
 		  <div class="col-md-4">
 			<h1>youtube jukebox</h1>
 			<h4>realtime collabortive playlists.</h4>
-			<div class="panel panel-danger">...</div>
+			<br />
+			<div class="panel panel-danger fill">
+				<div class="panel-heading">
+					<div class="input-group input-group-sm">
+					  <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+					  <input type="text" class="form-control" placeholder="YouTube Search">
+					</div>
+				  </div>
+				  <div class="panel-body" id="search-results">
+					<ul id="posts" class="list-group">
+						<li class="list-group-item" data-id="5430d257c50abd00006a596c">
+							<img src="http://i.ytimg.com/vi/o-1XuiQpprA/0.jpg" width="50" height="50" alt="thumbnail" /><br/>
+							
+							<div class="btn-group btn-group-xs right">
+								<button type="button" class="btn btn-danger add-button">+ ADD</button>
+							</div>
+							A Sky Full of Stars - Coldplay
+					<span class="date">1230409 views - 3:43</span></li>
+					  </ul>
+				  </div>
+			</div>
+			<p>Send your friends a link to your room to allow them to add to allow them to add songs to your queue:</p>
+			<div id="link" class="input-group input-group-sm">
+			  <span class="input-group-addon"><span class="glyphicon glyphicon-link"></span></span>
+			  <input type="text" id="link-text" class="form-control" placeholder="Link" readonly>
+			</div>
+			<br />
 		  </div>
 		  <div class="col-md-8">
-			<!-- Nav tabs -->
-			<ul class="nav nav-pills" role="tablist">
-			  <li class="active"><a href="#posts" role="tab" data-toggle="pill">FEED</a></li>
-			  <li><a href="#favs" role="tab" data-toggle="pill">FAVORITES</a></li>
-			  <li><a href="#follow" role="tab" data-toggle="pill">FOLLOW</a></li>
-			</ul>
-			<br />
-		  	<div id="feed" class="panel panel-default">
-				<div class="panel-body" style="height: 250px; overflow: scroll;">
-					<div class="tab-content">
-						<ul id="posts" class="list-group fade in tab-pane active">
-					  
-						</ul>
-						<ul id="favs" class="list-group fade tab-pane">
-					  
-						</ul>
-						<ul id="follow" class="list-group fade tab-pane">
-					  
-						</ul>
-					</div>
+			<div class="embed-responsive embed-responsive-16by9">
+				<object>
+				  <param name="movie"
+				         value="https://www.youtube.com/v/M7lc1UVf-VE?version=3&autoplay=1"></param>
+				  <param name="allowScriptAccess" value="always"></param>
+				  <embed src="https://www.youtube.com/v/M7lc1UVf-VE?version=3&autoplay=1"
+				         type="application/x-shockwave-flash"
+				         allowscriptaccess="always"
+				         width="640" height="390"></embed>
+				</object>
+			</div>
+		  	<div id="queue-container" class="panel panel-default">
+				<div id="queue" class="panel-body">
+					
 				</div>
 				<div class="panel-footer">Welcome, Friend.
-				<span style="float:right;"><a href="/auth/logout">Leave</a></span>
+				<span class="right"><a href="/auth/logout">Leave</a></span>
 				</div>
 		  	</div>
 		  </div>
 		<div>
-	  <span style="color: #ddd;font-weight:100;text-align:center;">youtube jukebox by Kulpreet Chilana</span>
+	  <span id="footer">youtube jukebox by Kulpreet Chilana, Dylan Joss, Yonglin Wu</span>
 	</div>
   <!-- Modal -->
   <div class="modal fade" id="makeEdit" tabindex="-1" role="dialog" aria-labelledby="makeEdit" aria-hidden="true">
