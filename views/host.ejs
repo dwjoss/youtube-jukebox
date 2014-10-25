@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>YTJ</title>
+    <title>YouTube Jukebox | realtime collabortive playlists</title>
 	<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
 	<script src="/js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
@@ -10,6 +10,66 @@
 	<script src="/js/client.js" type="text/javascript" charset="utf-8"></script>
   </head>
   <body>
-    <h1>YouTube JukeBox | Host</h1>
+    <div class="container"> 
+		<div id="main" class="row">
+		  <div class="col-md-4">
+			<h1>youtube jukebox</h1>
+			<h4>realtime collabortive playlists.</h4>
+			<div class="panel panel-danger">...</div>
+		  </div>
+		  <div class="col-md-8">
+			<!-- Nav tabs -->
+			<ul class="nav nav-pills" role="tablist">
+			  <li class="active"><a href="#posts" role="tab" data-toggle="pill">FEED</a></li>
+			  <li><a href="#favs" role="tab" data-toggle="pill">FAVORITES</a></li>
+			  <li><a href="#follow" role="tab" data-toggle="pill">FOLLOW</a></li>
+			</ul>
+			<br />
+		  	<div id="feed" class="panel panel-default">
+				<div class="panel-body" style="height: 250px; overflow: scroll;">
+					<div class="tab-content">
+						<ul id="posts" class="list-group fade in tab-pane active">
+					  
+						</ul>
+						<ul id="favs" class="list-group fade tab-pane">
+					  
+						</ul>
+						<ul id="follow" class="list-group fade tab-pane">
+					  
+						</ul>
+					</div>
+				</div>
+				<div class="panel-footer">Welcome, Friend.
+				<span style="float:right;"><a href="/auth/logout">Leave</a></span>
+				</div>
+		  	</div>
+		  </div>
+		<div>
+	  <span style="color: #ddd;font-weight:100;text-align:center;">youtube jukebox by Kulpreet Chilana</span>
+	</div>
+  <!-- Modal -->
+  <div class="modal fade" id="makeEdit" tabindex="-1" role="dialog" aria-labelledby="makeEdit" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel">Edit post.</h4>
+        </div>
+		<form id="edit-form" action="/api/edit" method="PUT" accept-charset="utf-8">
+        <div class="modal-body">
+				<input type="hidden" name="id" value="" id="id-field">
+				<div class="input-group">
+				  <span class="input-group-addon">POST</span>
+				  <textarea name="text" class="form-control"></textarea>
+				</div>
+				<br />
+        </div>
+        <div class="modal-footer">
+		  <input type="submit" class="btn btn-primary" value="Commit Edit" style="float: right;">
+        </div>
+		</form>
+      </div>
+    </div>
+  </div>
   </body>
 </html>

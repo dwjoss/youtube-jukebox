@@ -2,6 +2,8 @@ $(document).ready(function() {
 	io = io.connect();
 	var roomID = window.location.pathname.split('/')[2];
 	
+	$('#link input[type=text]').val(window.location);
+	
 	// Listen for the new user event.
 	io.on('users', function(data) {
 		if (data.room === roomID) {

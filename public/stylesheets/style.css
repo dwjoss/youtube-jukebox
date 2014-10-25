@@ -12,7 +12,7 @@ h1 {
 	margin: 0px;
 }
 
-h4, h5 {
+h4, h5, p {
 	font-weight: 100;
 }
 
@@ -27,5 +27,44 @@ h4, h5 {
 	background-color: white;
 	padding: 30px;
 	margin: 0 auto;
-	width: 900px;
+}
+
+.right {
+	float: right;
+}
+
+.fill { 
+    min-height: 100%;
+    height: 100%;
+}
+
+.date {
+	display: block; 
+	color: #aaa; 
+	text-weight:100; 
+	font-size: 10px;
+}
+
+#link-text {
+	cursor: text;
+}
+
+#search-results {
+	height: 300px;
+}
+
+#queue-container {
+	margin-top: -5px;
+}
+
+#queue {
+	margin-top: -15px;
+	height: 150px; 
+	overflow: scroll;
+}
+
+#footer {
+	color: #ddd;
+	font-weight:100;
+	text-align:center;
 }
