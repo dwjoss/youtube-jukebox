@@ -48,6 +48,8 @@
 			  <input type="text" id="link-text" class="form-control" placeholder="Link" readonly>
 			</div>
 			<br />
+			<p>Listeners: <span id="listeners">None.</span></p>
+			<br />
 		  </div>
 		  <div class="col-md-8">
 			<div class="embed-responsive embed-responsive-16by9">
@@ -77,13 +79,13 @@
 						</li>
 					</ul>
 				</div>
-				<div class="panel-footer">Welcome, Friend.
+				<div class="panel-footer">Welcome, <%= user %>.
 				<span class="right"><a href="/auth/logout">Leave</a></span>
 				</div>
 		  	</div>
 		  </div>
 		<div>
-	  <span id="footer">youtube jukebox by Kulpreet Chilana, Dylan Joss, Yonglin Wu</span>
+	  	<span id="footer">youtube jukebox by Kulpreet Chilana, Dylan Joss, Yonglin Wu</span>
 	</div>
   </body>
 </html>

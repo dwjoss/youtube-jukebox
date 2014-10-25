@@ -13,7 +13,7 @@ router.get('/', function(req, res) {
 router.get(new RegExp('room\/(.+)'), function(req, res) {
 	var room = req.params[0];
 	if (req.user && (req.user.room.toString() === room)) {
-		res.render('host');
+		res.render('host', {user: req.user.name});
 	} else {
 		res.render('participant');
 	}

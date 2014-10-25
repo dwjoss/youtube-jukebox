@@ -31,10 +31,19 @@ $(document).ready(function() {
 		})
 	});
 	
+	function updateListenerList(listeners) {
+		var userString = "";
+		$.each(listeners, function( index, user ) {
+			userString = userString + user + ", ";
+		});
+		userString = userString.substring(0, userString.length - 2);
+		$('#listeners').text(userString);
+	}
+	
 	// Listen for the new user event.
 	io.on('users', function(data) {
 		if (data.room === roomID) {
-			console.log('Users in room: ' + data);
+			updateListenerList(data.listeners)
 		}
 	})
 	
