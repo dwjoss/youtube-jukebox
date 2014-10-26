@@ -20,13 +20,14 @@ $(document).ready(function() {
 		        'query': query, 
 		    },
 		    success: function(results){
-				$.each(results, function( index, song ) {
-					console.log(song);
-					/*
-						HERE IS WHERE YOU HANDLEBAR EACH SONG
-						AND INSERT THE RESULTING HTML INTO $('#posts')
-					*/
-				});
+				// $.each(results, function( index, song ) {
+				// 	console.log(song);
+					
+				// 		HERE IS WHERE YOU HANDLEBAR EACH SONG
+				// 		AND INSERT THE RESULTING HTML INTO $('#posts')
+					
+				// });
+				loadSearchResults(results);
 		    }
 		})
 	});
@@ -62,3 +63,7 @@ $(document).ready(function() {
 	})
 
 });
+
+var loadSearchResults = function(results){
+	$('#serach-results').html(Handlebars.templates['search-results'](results));
+};
