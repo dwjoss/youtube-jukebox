@@ -57,6 +57,7 @@ Response:
     error(404): returns error message: 'The room requested was not found.'
 */
 router.post('/rooms/:room/users', function(req, res) {
+	res.cookie('userName', req.body.name);
     model.Room.findByIdAndUpdate(
         req.room._id,
         {$push: {listeners: req.body.name}},

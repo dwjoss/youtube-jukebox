@@ -5,12 +5,41 @@
 	<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
 	<script src="/js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="/js/login.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/client.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/handlebars.runtime.js"></script>
     <script src="/js/templates.js"></script>
     <script src="/js/index.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var room = window.location.pathname.split('/')[2];
+			if ($.cookie('userName') == null) {
+				$('#joinRoom').modal({backdrop: 'static', keyboard: false, show: true});
+				$('#joinButton').click(function(e){
+					var userName = $('#joinName').val();
+					$.ajax({
+					    type: 'POST',
+					    url: '/api/rooms/' + room + '/users',
+					    data: {
+					        'name': userName
+					    },
+					    success: function(msg) {
+							$('#userName').text(userName);
+							$('input[placeholder=Username]').val(userName);
+							$('#joinRoom').modal('hide');
+					    }
+					});
+				});
+			} else {
+				var userName = $.cookie('userName');
+				$('#userName').text(userName);
+				$('input[placeholder=Username]').val(userName);
+			}
+		});
+	</script>
   </head>
   <body>
     <div class="container"> 
@@ -28,7 +57,7 @@
 					<div class="panel-heading">
 						<div class="input-group input-group-sm">
 						  <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-						  <input type="text" class="form-control" placeholder="YouTube Search">
+						  <input type="text" id="youtube-search" class="form-control" placeholder="YouTube Search">
 						</div>
 					  </div>
 					  <div class="panel-body" id="search-results">
@@ -56,6 +85,8 @@
 			  <input type="text" id="link-text" class="form-control" placeholder="Link" readonly>
 			</div>
 			<br />
+			<p>Listeners: <span id="listeners">None.</span></p>
+			<br />
 		  </div>
 		  <br />
 		  <div class="col-md-8">
@@ -78,34 +109,68 @@
 						</li>
 					</ul>
 				</div>
-				<div class="panel-footer">Welcome, Friend.
-				<span class="right"><a href="/auth/logout">Host Your Own Room</a></span>
+				<div class="panel-footer">Welcome, <span id="userName">Friend</span>.
+				<span class="right"><a href="#" data-toggle="modal" data-target="#createAccount">Host Your Own Room</a></span>
 				</div>
 		  	</div>
+			<span style="color: #ddd;font-weight:100;text-align:center;">youtube jukebox by Kulpreet Chilana, Dylan Joss, Yonglin Wu</span>
 		  </div>
 	  </div>
 		<div>
-	  <span style="color: #ddd;font-weight:100;text-align:center;">youtube jukebox by Kulpreet Chilana, Dylan Joss, Yonglin Wu</span>
 	</div>
   <!-- Modal -->
-  <div class="modal fade" id="makeEdit" tabindex="-1" role="dialog" aria-labelledby="makeEdit" aria-hidden="true">
+  <div class="modal fade" id="createAccount" tabindex="-1" role="dialog" aria-labelledby="createAccount" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-          <h4 class="modal-title" id="myModalLabel">Edit post.</h4>
+          <h4 class="modal-title" id="myModalLabel">Create a jukebox account.</h4>
         </div>
-		<form id="edit-form" action="/api/edit" method="PUT" accept-charset="utf-8">
+		<form id="create-account-form" action="/auth/create" method="POST" accept-charset="utf-8">
         <div class="modal-body">
-				<input type="hidden" name="id" value="" id="id-field">
+			<div id="create-error" style="display: none;" class="alert alert-danger alert-dismissible" role="alert">
+			  There was an error creating your account. Please try again.
+			</div>
 				<div class="input-group">
-				  <span class="input-group-addon">POST</span>
-				  <textarea name="text" class="form-control"></textarea>
+				  <span class="input-group-addon">@</span>
+				  <input type="text" name="name" class="form-control" placeholder="Username">
+				</div>
+				<br />
+				<div class="input-group">
+				  <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+				  <input type="text" name="email" class="form-control" placeholder="Email">
+				</div>
+				<br />
+				<div class="input-group">
+				  <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+				  <input type="password" name="password" class="form-control" placeholder="Password">
 				</div>
 				<br />
         </div>
         <div class="modal-footer">
-		  <input type="submit" class="btn btn-primary" value="Commit Edit" style="float: right;">
+		  <input type="submit" class="btn btn-warning" value="Create Account" style="float: right;">
+        </div>
+		</form>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="joinRoom" tabindex="-1" role="dialog" aria-labelledby="joinRoom" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Join the room.</h4>
+        </div>
+        <div class="modal-body">
+			<div id="create-error" style="display: none;" class="alert alert-danger alert-dismissible" role="alert">
+			  Your name cannot be blank.
+			</div>
+				<div class="input-group">
+				  <span class="input-group-addon">NAME</span>
+				  <input id="joinName" type="text" name="name" class="form-control" placeholder="Enter your name.">
+				</div>
+        </div>
+        <div class="modal-footer">
+		  <button id="joinButton" class="btn btn-danger right">Join Room</button>
         </div>
 		</form>
       </div>
