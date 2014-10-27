@@ -1,6 +1,11 @@
 var isHost;
 var roomID;
 
+Handlebars.registerPartial('search-results', Handlebars.templates['search-results']);
+Handlebars.registerPartial('queue', Handlebars.templates['queue']);
+Handlebars.registerPartial('player', Handlebars.templates['player']);
+Handlebars.registerPartial('search-result', Handlebars.templates['search-result']);
+
 $(document).ready(function() {
 	io = io.connect();
 	roomID = window.location.pathname.split('/')[2];
@@ -30,13 +35,8 @@ $(document).ready(function() {
 		        'query': query, 
 		    },
 		    success: function(results){
-				// $.each(results, function( index, song ) {
-				// 	console.log(song);
-					
-				// 		HERE IS WHERE YOU HANDLEBAR EACH SONG
-				// 		AND INSERT THE RESULTING HTML INTO $('#posts')
-					
-				// });
+		    	console.log("search");
+		    	console.log(results);
 				loadSearchResults(results);
 		    }
 		})
@@ -82,7 +82,7 @@ $(document).on('click', '.add-button', function(){
 });
 
 var loadSearchResults = function(results){
-	$('#serach-results').html(Handlebars.templates['search-results'](results));
+	$('#search-results').html(Handlebars.templates['search-results'](results));
 };
 
 var loadSongQueue = function(refreshPlayer){
