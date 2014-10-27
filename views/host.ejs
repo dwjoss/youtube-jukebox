@@ -8,8 +8,12 @@
 	<script src="/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/js/client.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/handlebars.runtime.js"></script>
+    <script src="/js/templates.js"></script>
+    <script src="/js/host.js"></script>
   </head>
   <body>
+  	<div id="status" style="display: none;"> <%= status %> </div> 
     <div class="container"> 
 		<div id="main" class="row">
 		  <div class="col-md-4">
@@ -23,7 +27,9 @@
 					  <input type="text" id="youtube-search" class="form-control" placeholder="YouTube Search">
 					</div>
 				  </div>
-				  <div class="panel-body" id="search-results">
+				  <!-- TODO: make a handlerbar template for "search-results" -->
+				  <div class="panel-body" id="serach-results"></div>
+				  <!-- <div class="panel-body" id="search-results">
 					<ul id="posts" class="list-group">
 						<li class="list-group-item" style="padding: 10px" data-id="5430d257c50abd00006a596c">
 							<div class="media">
@@ -40,7 +46,7 @@
 							</div>
 						</li>
 					  </ul>
-				  </div>
+				  </div> -->   
 			</div>
 			<p>Send your friends a link to this room to allow them to add songs to the queue:</p>
 			<div id="link" class="input-group input-group-sm">
@@ -48,9 +54,13 @@
 			  <input type="text" id="link-text" class="form-control" placeholder="Link" readonly>
 			</div>
 			<br />
+			<p>Listeners: <span id="listeners">None.</span></p>
+			<br />
 		  </div>
 		  <div class="col-md-8">
-			<div class="embed-responsive embed-responsive-16by9">
+		  	<div class="embed-responsive embed-responsive-16by9" id= "player"> </div>
+		  	<!-- TODO: make a handlebar template for "player" -->
+			<!-- <div class="embed-responsive embed-responsive-16by9">
 				<object>
 				  <param name="movie"
 				         value="https://www.youtube.com/v/M7lc1UVf-VE?version=3&autoplay=1"></param>
@@ -60,9 +70,11 @@
 				         allowscriptaccess="always"
 				         width="640" height="390"></embed>
 				</object>
-			</div>
+			</div> -->
 		  	<div id="queue-container" class="panel panel-default">
-				<div id="queue" class="panel-body">
+		  		<div id= "queue" class= "panel-body"> </div>
+		  		<!-- TODO: make a handlebar template for "queue" -->
+				<!-- <div id="queue" class="panel-body">
 					<ul id="queue-songs" class="list-group">
 						<li class="list-group-item" style="padding: 10px" data-id="5430d257c50abd00006a596c">
 							<div class="media">
@@ -76,14 +88,14 @@
 							</div>
 						</li>
 					</ul>
-				</div>
-				<div class="panel-footer">Welcome, Friend.
+				</div> -->
+				<div class="panel-footer">Welcome, <%= user %>.
 				<span class="right"><a href="/auth/logout">Leave</a></span>
 				</div>
 		  	</div>
 		  </div>
 		<div>
-	  <span id="footer">youtube jukebox by Kulpreet Chilana, Dylan Joss, Yonglin Wu</span>
+	  	<span id="footer">youtube jukebox by Kulpreet Chilana, Dylan Joss, Yonglin Wu</span>
 	</div>
   </body>
 </html>

@@ -5,12 +5,17 @@
 	<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
 	<script src="/js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/js/login.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/client.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/handlebars.runtime.js"></script>
+    <script src="/js/templates.js"></script>
+    <script src="/js/participant.js"></script>
   </head>
   <body>
+  	<div id="status" style="display: none;"> <%= status %> </div> 
     <div class="container"> 
 		<div id="main">
 			<div class="row">
@@ -29,7 +34,8 @@
 						  <input type="text" id="youtube-search" class="form-control" placeholder="YouTube Search">
 						</div>
 					  </div>
-					  <div class="panel-body" id="search-results">
+				  	  <div class="panel-body" id="serach-results"></div>
+					  <!-- <div class="panel-body" id="search-results">
 						<ul id="posts" class="list-group">
 							<li class="list-group-item" style="padding: 10px" data-id="5430d257c50abd00006a596c">
 								<div class="media">
@@ -46,13 +52,15 @@
 								</div>
 							</li>
 						  </ul>
-					  </div>
+					  </div> -->
 				</div>
 			<p>Send your friends a link to this room to allow them to add songs to the queue:</p>
 			<div id="link" class="input-group input-group-sm">
 			  <span class="input-group-addon"><span class="glyphicon glyphicon-link"></span></span>
 			  <input type="text" id="link-text" class="form-control" placeholder="Link" readonly>
 			</div>
+			<br />
+			<p>Listeners: <span id="listeners">None.</span></p>
 			<br />
 		  </div>
 		  <br />
@@ -61,7 +69,8 @@
 				<div class="panel-heading">
 				    <h3 class="panel-title">Song Queue</h3>
 				  </div>
-				<div id="queue" class="panel-body">
+				<div id= "queue" class= "panel-body"> </div>
+				<!-- <div id="queue" class="panel-body">
 					<ul id="queue-songs" class="list-group">
 						<li class="list-group-item" style="padding: 10px" data-id="5430d257c50abd00006a596c">
 							<div class="media">
@@ -75,15 +84,15 @@
 							</div>
 						</li>
 					</ul>
-				</div>
-				<div class="panel-footer">Welcome, Friend.
+				</div> -->
+				<div class="panel-footer">Welcome, <span id="userName">Friend</span>.
 				<span class="right"><a href="#" data-toggle="modal" data-target="#createAccount">Host Your Own Room</a></span>
 				</div>
 		  	</div>
+			<span style="color: #ddd;font-weight:100;text-align:center;">youtube jukebox by Kulpreet Chilana, Dylan Joss, Yonglin Wu</span>
 		  </div>
 	  </div>
 		<div>
-	  <span style="color: #ddd;font-weight:100;text-align:center;">youtube jukebox by Kulpreet Chilana, Dylan Joss, Yonglin Wu</span>
 	</div>
   <!-- Modal -->
   <div class="modal fade" id="createAccount" tabindex="-1" role="dialog" aria-labelledby="createAccount" aria-hidden="true">
@@ -116,6 +125,28 @@
         </div>
         <div class="modal-footer">
 		  <input type="submit" class="btn btn-warning" value="Create Account" style="float: right;">
+        </div>
+		</form>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="joinRoom" tabindex="-1" role="dialog" aria-labelledby="joinRoom" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Join the room.</h4>
+        </div>
+        <div class="modal-body">
+			<div id="create-error" style="display: none;" class="alert alert-danger alert-dismissible" role="alert">
+			  Your name cannot be blank.
+			</div>
+				<div class="input-group">
+				  <span class="input-group-addon">NAME</span>
+				  <input id="joinName" type="text" name="name" class="form-control" placeholder="Enter your name.">
+				</div>
+        </div>
+        <div class="modal-footer">
+		  <button id="joinButton" class="btn btn-danger right">Join Room</button>
         </div>
 		</form>
       </div>

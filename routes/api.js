@@ -57,6 +57,7 @@ Response:
     error(404): returns error message: 'The room requested was not found.'
 */
 router.post('/rooms/:room/users', function(req, res) {
+	res.cookie('userName', req.body.name);
     model.Room.findByIdAndUpdate(
         req.room._id,
         {$push: {listeners: req.body.name}},
@@ -135,7 +136,7 @@ router.post('/rooms/:room/queue/songs', function(req, res) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
 			req.io.broadcast('addsong', {room: room._id, song: req.body.song});
-            res.json(room.queue);
+            res.json({success: true});
 		}
 	);
 	
@@ -164,7 +165,7 @@ router.delete('/rooms/:room/queue/songs', function(req, res) {
 	                return res.status(404).json({error: 'The room requested was not found.'});
 	            }
 				req.io.broadcast('popsong', {room: room._id});
-	            res.json(room.queue);
+	            res.json({success:true});
             }
         ); 
     } else {
