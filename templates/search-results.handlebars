@@ -1,8 +1,5 @@
-<div id="search-results">
-  <h1>Results</h1>
-  <ul>
-    {{#each search-results}}
-      {{> search-result}}
-    {{/each}}
-  </ul>
-</div>
+<ul id="posts" class="list-group">
+  {{#each search-results}}
+    {{> search-result}}
+  {{/each}}
+</ul>
