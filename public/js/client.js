@@ -6,6 +6,11 @@ Handlebars.registerPartial('queue', Handlebars.templates['queue']);
 Handlebars.registerPartial('player', Handlebars.templates['player']);
 Handlebars.registerPartial('search-result', Handlebars.templates['search-result']);
 
+// helper for displaying relevant metadata in search-result.handlebars
+Handlebars.registerHelper("getMetadataString", function(viewCount, duration) {
+	return viewCount + " views | " + utils.parseTime(duration);
+});
+
 $(document).ready(function() {
 	io = io.connect();
 	roomID = window.location.pathname.split('/')[2];

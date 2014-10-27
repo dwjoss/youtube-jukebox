@@ -7,7 +7,7 @@
   </span>
   <div class="media-body">
     <h4 class="media-heading">{{title}}</h4>   
-    <span class="date">{{statistics.viewCount}} + views + utils.parseTime({{duration}})</span>
+    <span class="date">{{getMetadataString statistics.viewCount duration}}</span>
     <div class="btn-group btn-group-xs right" style="margin-top: -20px">
         <button type="button" class="btn btn-danger add-button">+</button>
     </div>
