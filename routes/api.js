@@ -41,7 +41,7 @@ router.post('/search', function(req, res) {
 	};
 	search(req.body.query, opts, function(err, results) {
 	  if(err) return res.status(500).json({message:'Unable to fetch results from YouTube.'});
-	  res.json(results);
+	  res.json({"search-results":results});
 	});
 });
 
@@ -111,7 +111,7 @@ Response:
     error(404): returns error message: 'The room requested was not found.'
 */
 router.get('/rooms/:room/queue/songs', function(req, res) {
-	res.json(req.room.queue);
+	res.json({"queue": req.room.queue});
 });
 
 /* 
