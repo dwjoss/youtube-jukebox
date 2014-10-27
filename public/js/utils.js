@@ -19,5 +19,3 @@ utils.parseTime = function(secs) {
 
     return mm + ':' + ss;
 }
-
-module.exports = utils;

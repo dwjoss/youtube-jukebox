@@ -7,6 +7,16 @@ Handlebars.registerPartial('queue', Handlebars.templates['queue']);
 Handlebars.registerPartial('player', Handlebars.templates['player']);
 Handlebars.registerPartial('search-result', Handlebars.templates['search-result']);
 
+// helper for displaying relevant metadata in search-result.handlebars
+Handlebars.registerHelper("getMetadataString", function(viewCount, duration) {
+	return viewCount + " views | " + utils.parseTime(duration);
+});
+
+// helper for getting the YouTube URL with appropriate settings (i.e. set to autoplay)
+Handlebars.registerHelper("getVideoURL", function(url) {
+	return url + "&autoplay=1";
+});
+
 $(document).ready(function() {
 	io = io.connect();
 	roomID = window.location.pathname.split('/')[2];
@@ -83,7 +93,7 @@ var loadSongQueue = function(refreshPlayer){
 	    type: 'GET',
 	    url: '/api/rooms/' + roomID + '/queue/songs',
 	    success: function(songs) {
-	        $('#queue').html(Handlebars.templates['queue'](songs));
+	        $('#queue').html(Handlebars.templates['queue-songs'](songs));
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
