@@ -20,7 +20,6 @@ Handlebars.registerHelper("getVideoURL", function(url) {
 $(document).ready(function() {
 	io = io.connect();
 	roomID = window.location.pathname.split('/')[2];
-	console.log(roomID);
 	
 	$('#link input[type=text]').val(window.location);
 
@@ -28,6 +27,7 @@ $(document).ready(function() {
 		isHost = true;
 	} else {
 		isHost = false;
+		logInParticipant();
 	}
 	
 	$('#youtube-search').keyup(function(e){
@@ -135,3 +135,38 @@ var updateListenerList = function() {
 	    }
 	});
 };
+
+var logInParticipant = function() {
+	if ($.cookie('userName') == null) {
+				$('#joinRoom').modal({backdrop: 'static', keyboard: false, show: true});
+				$('#joinButton').click(function(e){
+					var userName = $('#joinName').val();
+					$.ajax({
+					    type: 'POST',
+					    url: '/api/rooms/' + roomID + '/users',
+					    data: {
+					        'name': userName
+					    },
+					    success: function(msg) {
+							$('#userName').text(userName);
+							$('input[placeholder=Username]').val(userName);
+							$('#joinRoom').modal('hide');
+					    }
+					});
+				});
+			} else {
+				var userName = $.cookie('userName');
+				$('#userName').text(userName);
+				$('input[placeholder=Username]').val(userName);
+			}
+}
+
+var loadNextSong = function(){
+	$.ajax({
+	    type: 'DELETE',
+	    url: '/api/rooms/' + roomID + '/queue/songs',
+	    success: function(response) {
+	        loadSongQueue(true);
+	    }
+	});
+}
