@@ -1,8 +1,18 @@
+var isHost;
+var roomID;
+
 $(document).ready(function() {
 	io = io.connect();
-	var roomID = window.location.pathname.split('/')[2];
+	roomID = window.location.pathname.split('/')[2];
+	console.log(roomID);
 	
 	$('#link input[type=text]').val(window.location);
+
+	if ($('#status').val() == 'host'){
+		isHost = true;
+	} else {
+		isHost = false;
+	}
 	
 	$('#youtube-search').keyup(function(e){
 	    if(e.keyCode == 13)
@@ -88,13 +98,17 @@ var loadSongQueue = function(songs){
 	        console.log(error);
 	    }
 	});
+
+	if (isHost){
+		$('#player').html(Handlebars.templates['player'](songs[0]));
+	}
 }
 
 var addSong = function(song){
 	$.ajax({
 	    type: 'POST',
 	    url: '/api/rooms/' + room + '/queue/songs',
-	    data: song
+	    data: song,
 	    success: function(response) {
 	    	loadSongQueue();
 	    },

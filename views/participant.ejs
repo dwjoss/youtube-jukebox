@@ -12,36 +12,10 @@
 	<script src="/js/client.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/handlebars.runtime.js"></script>
     <script src="/js/templates.js"></script>
-    <script src="/js/index.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			var room = window.location.pathname.split('/')[2];
-			if ($.cookie('userName') == null) {
-				$('#joinRoom').modal({backdrop: 'static', keyboard: false, show: true});
-				$('#joinButton').click(function(e){
-					var userName = $('#joinName').val();
-					$.ajax({
-					    type: 'POST',
-					    url: '/api/rooms/' + room + '/users',
-					    data: {
-					        'name': userName
-					    },
-					    success: function(msg) {
-							$('#userName').text(userName);
-							$('input[placeholder=Username]').val(userName);
-							$('#joinRoom').modal('hide');
-					    }
-					});
-				});
-			} else {
-				var userName = $.cookie('userName');
-				$('#userName').text(userName);
-				$('input[placeholder=Username]').val(userName);
-			}
-		});
-	</script>
+    <script src="/js/participant.js"></script>
   </head>
   <body>
+  	<div id="status" style="display: none;"> <%= status %> </div> 
     <div class="container"> 
 		<div id="main">
 			<div class="row">
