@@ -46,6 +46,19 @@ router.post('/search', function(req, res) {
 });
 
 
+/* 
+Get list of listeners of a room
+GET  /rooms/:roomId/users
+No request parameters
+Response:
+    success(200): returns the list of listeners in the room
+    error(404): returns error message: 'The room requested was not found.'
+*/
+router.get('/rooms/:room/users',function(req,res){
+    res.json({'listeners':req.room.listeners});
+});
+
+
 /*
 Add a user to a room
 POST /rooms/:roomId/users
@@ -70,7 +83,7 @@ router.post('/rooms/:room/users', function(req, res) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
             req.io.broadcast('users', {room: room._id, listeners: room.listeners});
-            res.json(room.listeners);
+            res.json({success: true});
         }
     );
 });
@@ -97,7 +110,7 @@ router.delete('/rooms/:room/users/:name', function(req, res) {
                 return res.status(404).json({error: 'The room requested was not found.'});
             }
             req.io.broadcast('users', {room: room._id, listeners: room.listeners});
-            return res.status(200).json({message: name + ' just left room ' + req.room._id});
+            return res.status(200).json({success: true});
         }
     );
 });

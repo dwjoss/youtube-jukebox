@@ -1,5 +1,6 @@
 var isHost;
 var roomID;
+var listeners;
 
 Handlebars.registerPartial('search-results', Handlebars.templates['search-results']);
 Handlebars.registerPartial('queue', Handlebars.templates['queue']);
@@ -43,34 +44,26 @@ $(document).ready(function() {
 	});
 
 	loadSongQueue(true);
-	
-	function updateListenerList(listeners) {
-		var userString = "";
-		$.each(listeners, function( index, user ) {
-			userString = userString + user + ", ";
-		});
-		userString = userString.substring(0, userString.length - 2);
-		$('#listeners').text(userString);
-	}
+	updateListenerList();
 	
 	// Listen for the new user event.
 	io.on('users', function(data) {
 		if (data.room === roomID) {
-			updateListenerList(data.listeners)
+			updateListenerList();
 		}
 	})
 	
 	// Listen for the new song event.
 	io.on('addsong', function(data) {
 		if (data.room === roomID) {
-	    	console.log('Add song: ' + data);
+	    	loadSongQueue(false);
 		}
 	})
 	
 	// Listen for song pop events.
 	io.on('popsong', function(data) {
 		if (data.room === roomID) {
-	   		console.log('Pop song: ' + data);
+	   		loadSongQueue(false);
 		}
 	})
 
@@ -117,3 +110,18 @@ var addSong = function(song){
 	    }
 	});
 }
+
+var updateListenerList = function() {
+	$.ajax({
+	    type: 'GET',
+	    url: '/api/rooms/' + room + '/users',
+	    success: function(response) {
+	    	var userString = "";
+			$.each(response.listeners, function( index, user ) {
+				userString = userString + user + ", ";
+			});
+			userString = userString.substring(0, userString.length - 2);
+			$('#listeners').text(userString);
+	    }
+	});
+};
