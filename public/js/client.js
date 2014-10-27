@@ -31,6 +31,8 @@ $(document).ready(function() {
 		    }
 		})
 	});
+
+	loadSongQueue();
 	
 	function updateListenerList(listeners) {
 		var userString = "";
@@ -64,6 +66,41 @@ $(document).ready(function() {
 
 });
 
+$(document).on('click', '#home-link', function(){
+	//TODO: construct song object, giving information about the button
+	addSong(song);
+});
+
 var loadSearchResults = function(results){
 	$('#serach-results').html(Handlebars.templates['search-results'](results));
 };
+
+var loadSongQueue = function(songs){
+	$.ajax({
+	    type: 'GET',
+	    url: '/api/rooms/' + roomID + '/queue/songs',
+	    success: function(songs) {
+	        console.log(songs);
+	        $('#queue').html(Handlebars.templates['queue'](songs));
+	    },
+	    error: function(req, textStatus, error) {
+	        console.log(textStatus);
+	        console.log(error);
+	    }
+	});
+}
+
+var addSong = function(song){
+	$.ajax({
+	    type: 'POST',
+	    url: '/api/rooms/' + room + '/queue/songs',
+	    data: song
+	    success: function(response) {
+	    	loadSongQueue();
+	    },
+	    error: function(req, textStatus, error) {
+	        console.log(textStatus);
+	        console.log(error);
+	    }
+	});
+}

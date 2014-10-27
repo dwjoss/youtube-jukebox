@@ -10,7 +10,7 @@
 	<script src="/js/client.js" type="text/javascript" charset="utf-8"></script>
 	<script src="/js/handlebars.runtime.js"></script>
     <script src="/js/templates.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="/js/host.js"></script>
   </head>
   <body>
     <div class="container"> 
@@ -26,6 +26,8 @@
 					  <input type="text" id="youtube-search" class="form-control" placeholder="YouTube Search">
 					</div>
 				  </div>
+				  <!-- TODO: make a handlerbar template for "search-results" -->
+				  <div class="panel-body" id="serach-results"></div>
 				  <!-- <div class="panel-body" id="search-results">
 					<ul id="posts" class="list-group">
 						<li class="list-group-item" style="padding: 10px" data-id="5430d257c50abd00006a596c">
@@ -43,9 +45,7 @@
 							</div>
 						</li>
 					  </ul>
-				  </div> -->
-				  <!-- TODO: make a handlerbar template for "search-results" -->
-				  <div class="panel-body" id="serach-results"></div>  
+				  </div> -->   
 			</div>
 			<p>Send your friends a link to this room to allow them to add songs to the queue:</p>
 			<div id="link" class="input-group input-group-sm">
@@ -71,7 +71,7 @@
 				</object>
 			</div> -->
 		  	<div id="queue-container" class="panel panel-default">
-		  		<div id= "queue" class= "panel-body">
+		  		<div id= "queue" class= "panel-body"> </div>
 		  		<!-- TODO: make a handlebar template for "queue" -->
 				<!-- <div id="queue" class="panel-body">
 					<ul id="queue-songs" class="list-group">
