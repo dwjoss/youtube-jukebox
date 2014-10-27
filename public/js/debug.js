@@ -8,7 +8,8 @@ $(document).ready(function(){
             'query': query, 
         }
     }).done(function(response) {
-        loadDebugPage(response);
+        loadDebugPage('search_results', {search_results: response});
+        console.log(response);
     }).fail(function(jqhxr) {
         alert('Some error occurred');
     });
