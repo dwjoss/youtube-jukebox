@@ -124,7 +124,7 @@ var addSong = function(song){
 var updateListenerList = function() {
 	$.ajax({
 	    type: 'GET',
-	    url: '/api/rooms/' + room + '/users',
+	    url: '/api/rooms/' + roomID + '/users',
 	    success: function(response) {
 	    	var userString = "";
 			$.each(response.listeners, function( index, user ) {

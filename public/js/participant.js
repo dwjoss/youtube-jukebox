@@ -1,4 +1,5 @@
 $(document).ready(function() {
+			console.log("participant-hi");
 			var room = window.location.pathname.split('/')[2];
 			if ($.cookie('userName') == null) {
 				$('#joinRoom').modal({backdrop: 'static', keyboard: false, show: true});
