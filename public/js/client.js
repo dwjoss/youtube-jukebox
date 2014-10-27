@@ -42,7 +42,7 @@ $(document).ready(function() {
 		})
 	});
 
-	loadSongQueue();
+	loadSongQueue(true);
 	
 	function updateListenerList(listeners) {
 		var userString = "";
@@ -85,7 +85,7 @@ var loadSearchResults = function(results){
 	$('#serach-results').html(Handlebars.templates['search-results'](results));
 };
 
-var loadSongQueue = function(songs){
+var loadSongQueue = function(refreshPlayer){
 	$.ajax({
 	    type: 'GET',
 	    url: '/api/rooms/' + roomID + '/queue/songs',
@@ -98,7 +98,7 @@ var loadSongQueue = function(songs){
 	    }
 	});
 
-	if (isHost){
+	if (isHost && refreshPlayer){
 		$('#player').html(Handlebars.templates['player'](songs[0]));
 	}
 }
