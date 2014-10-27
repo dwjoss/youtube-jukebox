@@ -76,7 +76,7 @@ $(document).ready(function() {
 
 });
 
-$(document).on('click', '#home-link', function(){
+$(document).on('click', '.add-button', function(){
 	//TODO: construct song object, giving information about the button
 	addSong(song);
 });
@@ -90,7 +90,6 @@ var loadSongQueue = function(songs){
 	    type: 'GET',
 	    url: '/api/rooms/' + roomID + '/queue/songs',
 	    success: function(songs) {
-	        console.log(songs);
 	        $('#queue').html(Handlebars.templates['queue'](songs));
 	    },
 	    error: function(req, textStatus, error) {
