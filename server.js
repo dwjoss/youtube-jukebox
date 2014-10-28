@@ -112,6 +112,26 @@ app.use(function(err, req, res, next) {
     });
 });
 
+// Handle case where participant leaves room by closing browser.
+// There's a bug in Express.io that prevents cookies from being
+// updated in the same session, so a page refresh is required
+// for a participant to be removed from a room.
+app.io.route('disconnect', function(req) {
+	var cookie = require('cookie');
+	var roomID = req.headers.referer.split('/').slice(-1)[0];
+	var cookies = cookie.parse(req.headers.cookie);
+	if (!(cookies.userName === undefined)) {
+	    model.Room.findByIdAndUpdate(
+	        roomID,  
+	        {$pull: {listeners: cookies.userName}},
+	        function(err, room) {
+	            if (err || !room) { return }
+	            req.io.broadcast('users', {room: room._id, listeners: room.listeners});
+	        }
+	    );
+	}
+});
+
 var port = process.env.OPENSHIFT_NODEJS_PORT;
 var ip = process.env.OPENSHIFT_NODEJS_IP;
 
