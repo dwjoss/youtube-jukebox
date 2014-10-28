@@ -15,7 +15,6 @@ Handlebars.registerHelper("getMetadataString", function(viewCount, duration) {
 });
 
 $(document).ready(function() {
-	io = io.connect();
 	roomID = window.location.pathname.split('/')[2];
 	
 	$('#link input[type=text]').val(window.location);
@@ -26,6 +25,8 @@ $(document).ready(function() {
 		isHost = false;
 		logInParticipant();
 	}
+	
+	io = io.connect();
 
 	$('#youtube-search').keyup(function(e){
 	    if(e.keyCode == 13)
@@ -139,29 +140,32 @@ var updateListenerList = function() {
 	});
 };
 
+var joinParticipant = function(room, userName) {
+	$.ajax({
+	    type: 'POST',
+	    url: '/api/rooms/' + roomID + '/users',
+	    data: {
+	        'name': userName
+	    },
+	    success: function(msg) {
+			$('#userName').text(userName);
+			$('input[placeholder=Username]').val(userName);
+			$('#joinRoom').modal('hide');
+	    }
+	});
+}
+
 var logInParticipant = function() {
 	if ($.cookie('userName') == null) {
-				$('#joinRoom').modal({backdrop: 'static', keyboard: false, show: true});
-				$('#joinButton').click(function(e){
-					var userName = $('#joinName').val();
-					$.ajax({
-					    type: 'POST',
-					    url: '/api/rooms/' + roomID + '/users',
-					    data: {
-					        'name': userName
-					    },
-					    success: function(msg) {
-							$('#userName').text(userName);
-							$('input[placeholder=Username]').val(userName);
-							$('#joinRoom').modal('hide');
-					    }
-					});
-				});
-			} else {
-				var userName = $.cookie('userName');
-				$('#userName').text(userName);
-				$('input[placeholder=Username]').val(userName);
-			}
+		$('#joinRoom').modal({backdrop: 'static', keyboard: false, show: true});
+		$('#joinButton').click(function(e){
+			var userName = $('#joinName').val();
+			joinParticipant(roomID, userName);
+		});
+	} else {
+		var userName = $.cookie('userName');
+		joinParticipant(roomID, userName);
+	}
 }
 
 var loadNextSong = function(){
