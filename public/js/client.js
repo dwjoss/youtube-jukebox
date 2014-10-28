@@ -190,8 +190,8 @@ var onYouTubePlayerReady = function(playerId) {
 var onytplayerStateChange = function(newState) {
 	// current song has ended
 	if (newState === 0) {
-		console.log('Song ended');
-		$('#myytplayer').replaceWith("<div id='ytapiplayer'><h3>Search + Add Songs To The Queue</h3></div>");
+		$('#waiting').show();
+		$('#myytplayer').replaceWith("<div id='ytapiplayer'></div>");
 		loadNextSong();
    }
 }
@@ -205,6 +205,7 @@ var loadPlayer = function(song) {
 
 	//var VIDEO_ID = "hRp3ND-fBNw";
 
+	$('#waiting').hide();
 	var params = { allowScriptAccess: "always" };
 	var atts = { id: "myytplayer" };
 	swfobject.embedSWF('http://www.youtube.com/v/' + VIDEO_ID + 
