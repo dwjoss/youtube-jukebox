@@ -1,6 +1,7 @@
 var isHost;
 var roomID;
 var listeners;
+var ytplayer; // the YouTube player object
 
 Handlebars.registerPartial('search-results', Handlebars.templates['search-results']);
 Handlebars.registerPartial('queue', Handlebars.templates['queue']);
@@ -10,11 +11,6 @@ Handlebars.registerPartial('search-result', Handlebars.templates['search-result'
 // helper for displaying relevant video metadata in search-result.handlebars
 Handlebars.registerHelper("getMetadataString", function(viewCount, duration) {
 	return viewCount + " views | " + utils.parseTime(duration);
-});
-
-// helper for getting the YouTube URL with appropriate settings (i.e. set to autoplay)
-Handlebars.registerHelper("getVideoURL", function(url) {
-	return url + "&autoplay=1";
 });
 
 $(document).ready(function() {
@@ -94,27 +90,26 @@ var loadSongQueue = function(refreshPlayer){
 	    url: '/api/rooms/' + roomID + '/queue/songs',
 	    success: function(songs) {
 	        $('#queue').html(Handlebars.templates['queue-songs'](songs));
+
+	        if (isHost && refreshPlayer){
+				//var VIDEO_ID = utils.extractVideoID(songs[0][url]);
+
+				var VIDEO_ID = "hRp3ND-fBNw";
+
+				var params = { allowScriptAccess: "always" };
+				var atts = { id: "myytplayer" };
+				swfobject.embedSWF('http://www.youtube.com/v/' + VIDEO_ID + 
+								   '?enablejsapi=1&playerapiid=ytplayer&version=3&autoplay=1',
+			                   	   'ytapiplayer', '640', '390', '8', null, null, params, atts);
+			}
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
 	        console.log(error);
 	    }
 	});
-	console.log(isHost);
 
-	if (isHost && refreshPlayer){
-		// $('#player').html(Handlebars.templates['player'](songs[0]));
-
-		//var VIDEO_ID = utils.extractVideoID(songs[0][url])
-
-		var VIDEO_ID = "hRp3ND-fBNw";
-
-		var params = { allowScriptAccess: "always" };
-    	var atts = { id: "myytplayer" };
-    	swfobject.embedSWF('http://www.youtube.com/v/' + VIDEO_ID + 
-    					   '?enablejsapi=1&playerapiid=ytplayer&version=3&autoplay=1',
-                       	   'ytapiplayer', '640', '390', '8', null, null, params, atts);
-	}
+	
 }
 
 var addSong = function(song){
@@ -180,4 +175,20 @@ var loadNextSong = function(){
 	        loadSongQueue(true);
 	    }
 	});
+}
+/*
+YouTube logic
+
+Reference: https://developers.google.com/youtube/js_api_reference
+*/
+var onYouTubePlayerReady = function(playerId) {
+	ytplayer = document.getElementById("myytplayer");
+	ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
+}
+
+var onytplayerStateChange = function(newState) {
+	// current song has ended
+	if (newState === 0) {
+		loadNextSong();
+   }
 }
