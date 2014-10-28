@@ -2,11 +2,12 @@ var isHost;
 var roomID;
 var listeners;
 var ytplayer; // the YouTube player object
+var searchResults;
 
 Handlebars.registerPartial('search-results', Handlebars.templates['search-results']);
-Handlebars.registerPartial('queue', Handlebars.templates['queue']);
-Handlebars.registerPartial('player', Handlebars.templates['player']);
 Handlebars.registerPartial('search-result', Handlebars.templates['search-result']);
+Handlebars.registerPartial('queue-songs', Handlebars.templates['queue-songs']);
+Handlebars.registerPartial('queue-song', Handlebars.templates['queue-song']);
 
 // helper for displaying relevant video metadata in search-result.handlebars
 Handlebars.registerHelper("getMetadataString", function(viewCount, duration) {
@@ -44,6 +45,7 @@ $(document).ready(function() {
 		    success: function(results){
 		    	console.log("search");
 		    	console.log(results);
+		    	searchResults = results['search-results'];
 				loadSearchResults(results);
 		    }
 		})
@@ -76,7 +78,9 @@ $(document).ready(function() {
 });
 
 $(document).on('click', '.add-button', function(){
-	//TODO: construct song object, giving information about the button
+	var index = parseInt($(this).attr('arrayIndex'));
+	var song = getSearchResult(index);
+
 	addSong(song);
 });
 
@@ -88,13 +92,14 @@ var loadSongQueue = function(refreshPlayer){
 	$.ajax({
 	    type: 'GET',
 	    url: '/api/rooms/' + roomID + '/queue/songs',
-	    success: function(songs) {
-	        $('#queue').html(Handlebars.templates['queue-songs'](songs));
-
+	    success: function(response) {
+	        $('#queue').html(Handlebars.templates['queue-songs']({'queue-songs':response.queue}));
 	        if (isHost && refreshPlayer){
-				//var VIDEO_ID = utils.extractVideoID(songs[0][url]);
+	        	console.log('load player');
 
-				var VIDEO_ID = "hRp3ND-fBNw";
+				var VIDEO_ID = utils.extractVideoID(response.queue[0].url);
+
+				//var VIDEO_ID = "hRp3ND-fBNw";
 
 				var params = { allowScriptAccess: "always" };
 				var atts = { id: "myytplayer" };
@@ -107,18 +112,21 @@ var loadSongQueue = function(refreshPlayer){
 	        console.log(textStatus);
 	        console.log(error);
 	    }
-	});
+	});	
+}
 
-	
+var getSearchResult = function(i) {
+	return searchResults[i];
 }
 
 var addSong = function(song){
+	console.log(song);
 	$.ajax({
 	    type: 'POST',
-	    url: '/api/rooms/' + room + '/queue/songs',
-	    data: song,
+	    url: '/api/rooms/' + roomID + '/queue/songs',
+	    data: {'song': JSON.stringify(song)},
 	    success: function(response) {
-	    	loadSongQueue();
+	    	loadSongQueue(false);
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);

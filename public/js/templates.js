@@ -8,9 +8,6 @@ templates['debug'] = template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(
     + escapeExpression(((helper = (helper = helpers.message || (depth0 != null ? depth0.message : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"message","hash":{},"data":data}) : helper)))
     + " </p>\n</div>";
 },"useData":true});
-templates['player'] = template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  return "";
-},"useData":true});
 templates['queue-song'] = template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, lambda=this.lambda;
   return "\n<li class=\"list-group-item\" style=\"padding: 10px\" data-id="
@@ -44,7 +41,9 @@ templates['search-result'] = template({"compiler":[6,">= 2.0.0-beta.1"],"main":f
     + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
     + "</h4>   \n    <span class=\"date\">"
     + escapeExpression(((helpers.getMetadataString || (depth0 && depth0.getMetadataString) || helperMissing).call(depth0, ((stack1 = (depth0 != null ? depth0.statistics : depth0)) != null ? stack1.viewCount : stack1), (depth0 != null ? depth0.duration : depth0), {"name":"getMetadataString","hash":{},"data":data})))
-    + "</span>\n    <div class=\"btn-group btn-group-xs right\" style=\"margin-top: -20px\">\n        <button type=\"button\" class=\"btn btn-danger add-button\">+</button>\n    </div>\n  </div>\n</div>\n</li>\n\n";
+    + "</span>\n    <div class=\"btn-group btn-group-xs right\" style=\"margin-top: -20px\">\n        <button type=\"button\" class=\"btn btn-danger add-button\" arrayIndex="
+    + escapeExpression(lambda((data && data.index), depth0))
+    + ">+</button>\n    </div>\n  </div>\n</div>\n</li>\n\n";
 },"useData":true});
 templates['search-results'] = template({"1":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";

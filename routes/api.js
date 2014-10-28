@@ -131,16 +131,17 @@ router.get('/rooms/:room/queue/songs', function(req, res) {
 Add a song to the queue of a room
 POST '/rooms/:room/queue/songs'
 Request parameters:
-    song: name of the song
+    song: song JSON
 Response:
     success(200): returns the list of songs in the queue
     error(404): returns error message: 'The room requested was not found.'
     error(500): returns error message: 'There was an error adding song to the queue.'
 */
 router.post('/rooms/:room/queue/songs', function(req, res) {
+    console.log(req.body.song);
 	model.Room.findByIdAndUpdate(
 		req.room._id,
-		{$push: {queue: req.body.song}},
+		{$push: {queue: JSON.parse(req.body.song)}},
 		function(err,room){
 			if (err) {
                 return res.status(500).json({error: 'There was an error addding song to the queue.'});
