@@ -94,18 +94,10 @@ var loadSongQueue = function(refreshPlayer){
 	    url: '/api/rooms/' + roomID + '/queue/songs',
 	    success: function(response) {
 	        $('#queue').html(Handlebars.templates['queue-songs']({'queue-songs':response.queue}));
-	        if (isHost && refreshPlayer){
+	        if ((isHost && refreshPlayer) || response.queue.length === 1){
 	        	console.log('load player');
 
-				var VIDEO_ID = utils.extractVideoID(response.queue[0].url);
-
-				//var VIDEO_ID = "hRp3ND-fBNw";
-
-				var params = { allowScriptAccess: "always" };
-				var atts = { id: "myytplayer" };
-				swfobject.embedSWF('http://www.youtube.com/v/' + VIDEO_ID + 
-								   '?enablejsapi=1&playerapiid=ytplayer&version=3&autoplay=1',
-			                   	   'ytapiplayer', '640', '390', '8', null, null, params, atts);
+				loadPlayer(response.queue[0]);
 			}
 	    },
 	    error: function(req, textStatus, error) {
@@ -113,6 +105,22 @@ var loadSongQueue = function(refreshPlayer){
 	        console.log(error);
 	    }
 	});	
+}
+
+var loadPlayer = function(song) {
+	if (!song) {
+		return;
+	}
+	
+	var VIDEO_ID = utils.extractVideoID(song.url);
+
+	//var VIDEO_ID = "hRp3ND-fBNw";
+
+	var params = { allowScriptAccess: "always" };
+	var atts = { id: "myytplayer" };
+	swfobject.embedSWF('http://www.youtube.com/v/' + VIDEO_ID + 
+					   '?enablejsapi=1&playerapiid=ytplayer&version=3&autoplay=1',
+                   	   'ytapiplayer', '640', '390', '8', null, null, params, atts);
 }
 
 var getSearchResult = function(i) {
@@ -201,7 +209,10 @@ var onYouTubePlayerReady = function(playerId) {
 var onytplayerStateChange = function(newState) {
 	// current song has ended
 	if (newState === 0) {
-		loadNextSong();
 		console.log('Song ended');
+		$('#myytplayer').replaceWith("<div class='embed-responsive embed-responsive-16by9' id='ytapiplayer'>You need Flash player 8+ and JavaScript enabled to view this video.</div>");
+		loadNextSong();
    }
 }
+
+var reloa
