@@ -23,13 +23,13 @@ $(document).ready(function() {
 	
 	$('#link input[type=text]').val(window.location);
 
-	if ($('#status').val() == 'host'){
+	if ($('#status').text() === 'host'){
 		isHost = true;
 	} else {
 		isHost = false;
 		logInParticipant();
 	}
-	
+
 	$('#youtube-search').keyup(function(e){
 	    if(e.keyCode == 13)
 	    {
@@ -100,6 +100,7 @@ var loadSongQueue = function(refreshPlayer){
 	        console.log(error);
 	    }
 	});
+	console.log(isHost);
 
 	if (isHost && refreshPlayer){
 		// $('#player').html(Handlebars.templates['player'](songs[0]));
@@ -107,10 +108,11 @@ var loadSongQueue = function(refreshPlayer){
 		//var VIDEO_ID = utils.extractVideoID(songs[0][url])
 
 		var VIDEO_ID = "hRp3ND-fBNw";
-		
+
 		var params = { allowScriptAccess: "always" };
     	var atts = { id: "myytplayer" };
-    	swfobject.embedSWF('http://www.youtube.com/v/' + VIDEO_ID + '?enablejsapi=1&playerapiid=ytplayer&version=3',
+    	swfobject.embedSWF('http://www.youtube.com/v/' + VIDEO_ID + 
+    					   '?enablejsapi=1&playerapiid=ytplayer&version=3&autoplay=1',
                        	   'ytapiplayer', '640', '390', '8', null, null, params, atts);
 	}
 }
