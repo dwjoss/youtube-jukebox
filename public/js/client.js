@@ -173,6 +173,10 @@ var loadNextSong = function(){
 	    url: '/api/rooms/' + roomID + '/queue/songs',
 	    success: function(response) {
 	        loadSongQueue(true);
+	    },
+	    error: function(req, textStatus, error) {
+	        console.log(textStatus);
+	        console.log(error);
 	    }
 	});
 }
@@ -190,5 +194,6 @@ var onytplayerStateChange = function(newState) {
 	// current song has ended
 	if (newState === 0) {
 		loadNextSong();
+		console.log('Song ended');
    }
 }
