@@ -107,25 +107,6 @@ var loadSongQueue = function(refreshPlayer){
 	});	
 }
 
-var loadPlayer = function(song) {
-	if (!song) {
-		return;
-	}
-	
-	var VIDEO_ID = utils.extractVideoID(song.url);
-
-	//var VIDEO_ID = "hRp3ND-fBNw";
-
-	var params = { allowScriptAccess: "always" };
-	var atts = { id: "myytplayer" };
-	swfobject.embedSWF('http://www.youtube.com/v/' + VIDEO_ID + 
-					   '?enablejsapi=1&playerapiid=ytplayer&version=3&autoplay=1',
-                   	   'ytapiplayer', '640', '390', '8', null, null, params, atts);
-}
-
-var getSearchResult = function(i) {
-	return searchResults[i];
-}
 
 var addSong = function(song){
 	console.log(song);
@@ -215,4 +196,22 @@ var onytplayerStateChange = function(newState) {
    }
 }
 
-var reloa
+var loadPlayer = function(song) {
+	if (!song) {
+		return;
+	}
+	
+	var VIDEO_ID = utils.extractVideoID(song.url);
+
+	//var VIDEO_ID = "hRp3ND-fBNw";
+
+	var params = { allowScriptAccess: "always" };
+	var atts = { id: "myytplayer" };
+	swfobject.embedSWF('http://www.youtube.com/v/' + VIDEO_ID + 
+					   '?enablejsapi=1&playerapiid=ytplayer&version=3&autoplay=1',
+                   	   'ytapiplayer', '640', '390', '8', null, null, params, atts);
+}
+
+var getSearchResult = function(i) {
+	return searchResults[i];
+}
