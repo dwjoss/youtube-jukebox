@@ -19,3 +19,14 @@ utils.parseTime = function(secs) {
 
     return mm + ':' + ss;
 }
+
+/*
+    Given an YouTube video URL of the form 
+    http://www.youtube.com/watch?v=hRp3ND-fBNw&feature=youtube_gdata,
+    extract the ID i.e. hRp3ND-fBNw
+*/
+utils.extractVideoID = function(url) {
+    var pos = url.indexOf('=');
+
+    return url.substring(pos + 1, pos + 1 + 11);
+}

@@ -102,7 +102,16 @@ var loadSongQueue = function(refreshPlayer){
 	});
 
 	if (isHost && refreshPlayer){
-		$('#player').html(Handlebars.templates['player'](songs[0]));
+		// $('#player').html(Handlebars.templates['player'](songs[0]));
+
+		//var VIDEO_ID = utils.extractVideoID(songs[0][url])
+
+		var VIDEO_ID = "hRp3ND-fBNw";
+		
+		var params = { allowScriptAccess: "always" };
+    	var atts = { id: "myytplayer" };
+    	swfobject.embedSWF('http://www.youtube.com/v/' + VIDEO_ID + '?enablejsapi=1&playerapiid=ytplayer&version=3',
+                       	   'ytapiplayer', '640', '390', '8', null, null, params, atts);
 	}
 }
 
