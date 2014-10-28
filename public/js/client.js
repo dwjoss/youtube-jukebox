@@ -191,7 +191,7 @@ var onytplayerStateChange = function(newState) {
 	// current song has ended
 	if (newState === 0) {
 		console.log('Song ended');
-		$('#myytplayer').replaceWith("<div class='embed-responsive embed-responsive-16by9' id='ytapiplayer'>You need Flash player 8+ and JavaScript enabled to view this video.</div>");
+		$('#myytplayer').replaceWith("<div id='ytapiplayer'><h3>Search + Add Songs To The Queue</h3></div>");
 		loadNextSong();
    }
 }
