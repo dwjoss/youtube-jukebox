@@ -1,3 +1,7 @@
+/*
+	Author: Kulpreet
+*/
+
 $(function() {
 	// Handle Submission of the Login Form using AJAX
 	$("#login-form").submit(function(e)

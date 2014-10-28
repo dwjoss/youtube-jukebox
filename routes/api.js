@@ -1,6 +1,8 @@
 /*
 REST API for YouTube Jukebox
 All server and database interaction described below
+
+Authors: Kulpreet, Dylan, Jason
 */
 
 var express = require('express');

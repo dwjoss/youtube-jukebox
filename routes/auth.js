@@ -2,6 +2,8 @@
 General logic for handling user authentication
 
 AJAX requests are asynchronous to ensure that they run in the order shown
+
+Author: Kulpreet
 */
 
 var express = require('express');

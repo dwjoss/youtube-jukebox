@@ -1,5 +1,7 @@
 /*
 AJAX Tests for YouTube Jukebox API
+
+Authors: Dylan, Jason
 */
 
 $(document).ready(function() {

@@ -1,3 +1,7 @@
+/*
+  Author: Kulpreet
+*/
+
 var express = require('express.io');
 var session = require('express-session')
 var path = require('path');

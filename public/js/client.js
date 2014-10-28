@@ -1,3 +1,7 @@
+/*
+	Authors: Kulpreet, Dylan, Jason
+*/
+
 var isHost;
 var roomID;
 var listeners;
