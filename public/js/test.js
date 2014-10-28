@@ -2,6 +2,8 @@
 AJAX Tests for YouTube Jukebox API
 */
 
+var testSearchResults;
+
 $(document).ready(function() {
 	// Testing Room Creation
 
@@ -39,12 +41,12 @@ $(document).ready(function() {
 	    data: { 
 	        'query': 'MIT', 
 	    },
-	    success: function(msg){
+	    success: function(response){
 	        console.log('Tested POST api/search');
-	        console.log('YouTube search results: ' + msg["search-results"]);
+	        testSearchResults = response["search-results"];
 	        
-            for (var i = 0; i < msg["search-results"].length; i++) {
-                console.log(msg["search-results"][i]);
+            for (var i = 0; i < testSearchResults.length; i++) {
+                console.log(testSearchResults[i]);
             }
         
         }
@@ -60,7 +62,7 @@ $(document).ready(function() {
 	    },
 	    success: function(msg) {
 	        console.log('Tested POST api/rooms/:room/users');
-	        console.log('Logged in users: ' + msg);
+	        console.log('Dylan joined');
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
@@ -78,7 +80,7 @@ $(document).ready(function() {
 	    },
 	    success: function(msg) {
 	        console.log('Tested POST api/rooms/:room/users');
-	        console.log('Logged in users: ' + msg);
+	        console.log('Jason joined');
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
@@ -86,17 +88,38 @@ $(document).ready(function() {
 	    }
 	});
 
+	$.ajax({
+	    type: 'GET',
+	    url: '/api/rooms/' + room + '/users',
+	    async: false,
+	    success: function(response) {
+	        console.log('Tested GET api/rooms/:room/users');
+	        var userString = "";
+			$.each(response.listeners, function( index, user ) {
+				userString = userString + user + ", ";
+			});
+			userString = userString.substring(0, userString.length - 2);
+			console.log(userString + ' have joined the room')
+	        
+	    },
+	    error: function(req, textStatus, error) {
+	        console.log(textStatus);
+	        console.log(error);
+	    }
+	});
+
+
+
 	// someone adds a song "Turn Down For What" in the queue
 	$.ajax({
 	    type: 'POST',
 	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
 	    data: {
-	        'song': 'Turn Down For What',
+	        'song': JSON.stringify(testSearchResults[0]),
 	    },
 	    success: function(msg) {
 	        console.log('Tested POST api/queue/add');
-	        console.log('New song queue ' + msg);
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
@@ -110,11 +133,10 @@ $(document).ready(function() {
 	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
 	    data: {
-	        'song': 'Get Low',
+	        'song': JSON.stringify(testSearchResults[1])
 	    },
-	    success: function(msg) {
+	    success: function(response) {
 	        console.log('Tested POST api/queue/add');
-	        console.log('New song queue ' + msg);
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
@@ -127,9 +149,9 @@ $(document).ready(function() {
 	    type: 'GET',
 	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
-	    success: function(msg) {
+	    success: function(response) {
 	        console.log('Tested GET api/rooms/:room/queue/songs');
-	        console.log('Song queue ' + msg);
+	        console.log(response.queue);
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
@@ -142,9 +164,8 @@ $(document).ready(function() {
 	    type: 'DELETE',
 	    url: '/api/rooms/' + room + '/queue/songs',
 	    async: false,
-	    success: function(msg) {
+	    success: function(response) {
 	        console.log('Tested DELETE api/rooms/:room/queue/songs');
-	        console.log('New song queues ' + msg);
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
@@ -157,9 +178,8 @@ $(document).ready(function() {
 	    type: 'DELETE',
 	    url: '/api/rooms/' + room +'/users/Dylan',
 	    async: false,
-	    success: function(msg) {
+	    success: function(response) {
 	        console.log('Tested DELETE api/rooms/:room/users/:name');
-	        console.log(msg);
 	    },
 	    error: function(req, textStatus, error) {
 	        console.log(textStatus);
