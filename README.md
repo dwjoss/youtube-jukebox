@@ -16,4 +16,4 @@ Jason - queue fetching/populating/editing, sockets
 
 Note:
 There's a bug in Express.io that prevents cookies from being updated in the same session, so a page refresh is required
-for a participant to be removed from a room. For more detials, see line 119 of server.js.
+for a participant to be removed from a room. For more details, see line 119 of server.js.
